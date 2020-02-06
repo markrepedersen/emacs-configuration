@@ -20,3 +20,8 @@ url/
 /eshell
 transient/
 /.lsp-session-*
+/.projectile
+/.dumbjump
+/.lsp*
+/.dap*
+/.mc*

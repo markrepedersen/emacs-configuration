@@ -1,5 +1,3 @@
-;;; Emacs Configurations                              -*- no-byte-compile: t -*-
-
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (let ((min-version "26.0"))
@@ -31,7 +29,7 @@
     ("ff97c90ea205e380a4be99b2dc8f0da90972e06983091e98ae677eda01a71fa3" default)))
  '(package-selected-packages
    (quote
-    (shell-pop which-key helm-lsp deadgrep nginx-mode ace-mc goto-last-change cmake-font-lock vlf keyfreq describe-number dashboard auto-dim-other-buffers zygospore windresize anzu nlinum diminish doom-modeline window-numbering on-screen exec-path-from-shell ace-isearch avy find-temp-file dired-narrow auto-dictionary flyspell-lazy copy-as-format unfill fix-word expand-region multiple-cursors git-timemachine git-messenger helm-ls-git gitconfig-mode gitignore-mode diff-hl helm-projectile projectile flycheck-rust flycheck-pycheckers flycheck-inline flycheck lsp-ui helm-xref cargo hindent company-ghc haskell-mode dumb-jump indent-guide smartparens helm-c-yasnippet yasnippet fic-mode markdown-mode csharp-mode php-mode json-mode swift-mode modern-cpp-font-lock highlight-escape-sequences clang-format string-edit comment-dwim-2 highlight-thing highlight-numbers rainbow-delimiters rainbow-mode dash-at-point bury-successful-compilation cmake-mode company-lsp company-statistics company-flx company flx-ido helpful hydra helm-ag helm-flx helm-gtags helm-swoop helm magit golden-ratio-scroll-screen key-chord beacon auto-compile use-package))))
+    (lsp-mode shell-pop which-key helm-lsp deadgrep nginx-mode ace-mc goto-last-change cmake-font-lock vlf keyfreq describe-number dashboard auto-dim-other-buffers zygospore windresize anzu nlinum diminish doom-modeline window-numbering on-screen exec-path-from-shell ace-isearch avy find-temp-file dired-narrow auto-dictionary flyspell-lazy copy-as-format unfill fix-word expand-region multiple-cursors git-timemachine git-messenger helm-ls-git gitconfig-mode gitignore-mode diff-hl helm-projectile projectile flycheck-rust flycheck-pycheckers flycheck-inline flycheck lsp-ui helm-xref cargo hindent company-ghc haskell-mode dumb-jump indent-guide smartparens helm-c-yasnippet yasnippet fic-mode markdown-mode csharp-mode php-mode json-mode swift-mode modern-cpp-font-lock highlight-escape-sequences clang-format string-edit comment-dwim-2 highlight-thing highlight-numbers rainbow-delimiters rainbow-mode dash-at-point bury-successful-compilation cmake-mode company-lsp company-statistics company-flx company flx-ido helpful hydra helm-ag helm-flx helm-gtags helm-swoop helm magit golden-ratio-scroll-screen key-chord beacon auto-compile use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -39,6 +37,33 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;;;;; Startup optimizations
+
+;;;;;; Set garbage collection threshold
+
+;; From https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/
+
+(setq gc-cons-threshold-original gc-cons-threshold)
+(setq gc-cons-threshold (* 1024 1024 100))
+
+;;;;;; Set file-name-handler-alist
+
+;; Also from https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/
+
+(setq file-name-handler-alist-original file-name-handler-alist)
+(setq file-name-handler-alist nil)
+
+;;;;;; Set deferred timer to reset them
+
+(run-with-idle-timer
+ 5 nil
+ (lambda ()
+   (setq gc-cons-threshold gc-cons-threshold-original)
+   (setq file-name-handler-alist file-name-handler-alist-original)
+   (makunbound 'gc-cons-threshold-original)
+   (makunbound 'file-name-handler-alist-original)
+   (message "gc-cons-threshold and file-name-handler-alist restored")))
 
 ;; Must come before any package configurations!
 (package-initialize)
@@ -139,50 +164,6 @@
 
 (random t)
 
-;;;;; Mac Setup ;;;;;
-
-(when (eq system-type 'darwin)
-  (progn
-    (if (or (eq window-system 'ns)
-            (eq window-system 'mac))
-        (progn
-          ;; avoid, e.g., hiding with M-h etc. (Carbon Emacs specific)
-          ;;(setq mac-pass-command-to-system nil)
-
-          ;; Let command be meta and alt be alt.
-          (setq mac-option-key-is-meta nil)
-          (setq mac-command-key-is-meta t)
-          (setq mac-command-modifier 'meta)
-          (setq mac-option-modifier nil)))
-
-    (defun remove-dos-eol ()
-      "Do not show ^M in files containing mixed UNIX and DOS line endings."
-      (interactive)
-      (setq buffer-display-table (make-display-table))
-      (aset buffer-display-table ?\^M []))
-
-    ;; ..and run it on all files.
-    (add-hook 'find-file-hook 'remove-dos-eol)
-
-    (defun open-with-finder ()
-      "Show current buffer-file, or directory if in Dired-mode, in Finder."
-      (interactive)
-      (if (eq 'dired-mode major-mode)
-          (shell-command "open .")
-        (shell-command (concat "open -R '" (concat buffer-file-name "'")))))
-
-    (defun toggle-fullscreen ()
-      "Toggle full screen."
-      (interactive)
-      (set-frame-parameter
-       nil 'fullscreen
-       (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))))
-
-;;;;; Linux / X11 Setup ;;;;;
-
-(if (eq window-system 'x)
-    (set-default-font "-misc-fixed-medium-r-normal--13-120-75-75-c-70-iso8859-15"))
-
 ;;;;; Shell ;;;;;
 
 (use-package shell-pop :ensure t
@@ -251,12 +232,13 @@
 (use-package key-chord
   :config
   (setq key-chord-two-keys-delay 0.2)
-
   (key-chord-define-global "qq" 'kill-this-buffer)
   (key-chord-define-global "''" "`'\C-b")
   (key-chord-define-global ",," 'indent-for-comment-and-indent)
 
   (key-chord-mode 1))
+
+(global-set-key (kbd "C-c h b") 'describe-personal-keybindings)
 
 ;;;;; Window Movement ;;;;;
 
@@ -268,54 +250,26 @@
 ;;;;; Magit ;;;;;
 
 (use-package magit
+  :bind (("C-x g" . magit-status)
+         ("C-x M-g" . magit-dispatch)))
+
+(use-package git-commit
+  :hook (git-commit-mode . my-american-dict))
+
+(use-package git-messenger
+  :bind ("C-x G" . git-messenger:popup-message)
   :config
-  ;; Bindings.
-  (global-set-key (kbd "C-x g") 'magit-status)
+  (setq git-messenger:show-detail t
+        git-messenger:use-magit-popup t))
 
-  ;; Show status full screen.
-  (defadvice magit-status (around magit-fullscreen activate)
-    (window-configuration-to-register :magit-fullscreen)
-    ad-do-it
-    (delete-other-windows))
+(use-package helm-git-grep
+  :bind
+  (("C-c j" . helm-git-grep)
+   ("C-c J" . helm-git-grep-at-point)))
 
-  ;; Cycle between how much info is shown in the margin: author + date, date, none.
-  (defun magit-cycle-margin ()
-    "Cycle visibility of the Magit margin.
-
-,-> show with details --> show no details -- hide -.
-`--------------------------------------------------'"
-    (interactive)
-    (if (not (magit-margin-option))
-        (user-error "Magit margin isn't supported in this buffer")
-      (pcase (list (nth 0 magit-buffer-margin)
-                   (and (nth 3 magit-buffer-margin) t))
-        (`(t t)
-         (setf (nth 3 magit-buffer-margin) nil)
-         (magit-set-buffer-margin nil t))
-        (`(t nil)
-         (setf (nth 0 magit-buffer-margin) nil)
-         (magit-set-buffer-margin))
-        (`(nil ,_)
-         (setf (nth 0 magit-buffer-margin) t)
-         (setf (nth 3 magit-buffer-margin) t)
-         (magit-set-buffer-margin nil t)))))
-
-  ;; Call `magit-staging' to show mode with only unstaged and staged changes diff where one can
-  ;; stage/unstage chunks like normal.
-  (define-derived-mode magit-staging-mode magit-status-mode "Magit staging"
-    "Mode for showing staged and unstaged changes."
-    :group 'magit-status)
-
-  (defun magit-staging-refresh-buffer ()
-    (magit-insert-section (status)
-      (magit-insert-unstaged-changes)
-      (magit-insert-staged-changes)))
-
-  (defun magit-staging ()
-    (interactive)
-    (window-configuration-to-register :magit-fullscreen)
-    (magit-mode-setup #'magit-staging-mode)
-    (delete-other-windows)))
+(use-package helm-ls-git
+  :bind
+  (("C-c g" . helm-ls-git-ls)))
 
 ;;;;; HELM ;;;;;
 
@@ -378,21 +332,9 @@
   (define-key 'help-command (kbd "SPC") 'helm-all-mark-rings))
 
 (use-package helm-swoop
-  :requires helm
-  :config
-  (setq helm-swoop-split-direction (quote split-window-vertically)
-        helm-swoop-split-with-multiple-windows t
-        helm-swoop-candidate-number-limit 1000)
-
-  ;; Use isearch bindings to move up and down.
-  (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-  (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-  (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-  (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
-
-  ;; Activate helm-swoop on isearch results.
-  (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-  (define-key isearch-mode-map (kbd "M-I") 'helm-multi-swoop-all-from-isearch))
+  :bind
+  (("C-s" . helm-swoop-without-pre-input)
+   ("C-S-s" . helm-swoop)))
 
 (use-package helm-gtags
   :requires helm
@@ -554,16 +496,18 @@ Command: %(netrom/compilation-command-string)
   (setq company-statistics-file
         (concat user-cache-dir "company-statistics-cache.el")))
 
+(use-package yasnippet
+  :ensure t
+  :commands yas-minor-mode
+  :hook (go-mode . yas-minor-mode))
+
 (use-package company
-  :requires company-statistics
+  :ensure t
   :config
+  (setq company-dabbrev-downcase 0)
   (setq company-idle-delay 0.3)
-
-  (add-hook 'global-company-mode-hook 'company-statistics-mode)
-
-  (global-company-mode 1)
-
-  (global-set-key (kbd "C-<tab>") 'company-complete))
+  (setq company-minimum-prefix-length 1)
+  :hook (after-init . global-company-mode))
 
 (use-package company-flx
   :requires company
@@ -574,8 +518,7 @@ Command: %(netrom/compilation-command-string)
   :requires company
   :config
   (push 'company-lsp company-backends)
-
-   ;; Disable client-side cache because the LSP server does a better job.
+  ;; Disable client-side cache because the LSP server does a better job.
   (setq company-transformers nil
         company-lsp-async t
         company-lsp-cache-candidates nil))
@@ -675,15 +618,6 @@ in compilation mode."
 (use-package bury-successful-compilation
   :config
   (add-hook 'prog-mode-hook 'bury-successful-compilation))
-
-(use-package dash-at-point
-  :config
-  (global-set-key "\C-cd" 'dash-at-point)
-  (add-to-list 'dash-at-point-mode-alist '(c-mode . "c,manpages"))
-  (add-to-list 'dash-at-point-mode-alist '(c++-mode . "cpp,qt,c,manpages,lux"))
-  (add-to-list 'dash-at-point-mode-alist '(python-mode . "py,flask"))
-  (add-to-list 'dash-at-point-mode-alist '(cmake-mode . "cmake"))
-  (add-to-list 'dash-at-point-mode-alist '(js-mode . "js")))
 
 ;; Highlights hexcolors, like #aabbcc and Red.
 (use-package rainbow-mode
@@ -1311,8 +1245,64 @@ in compilation mode."
     (let ((current-prefix-arg t))
       (call-interactively #'helm-lsp-global-workspace-symbol))))
 
+(use-package ws-butler
+  :hook (prog-mode . ws-butler-mode))
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+(use-package go-mode
+  :ensure t
+  :bind (
+         ;; If you want to switch existing go-mode bindings to use lsp-mode/gopls instead
+         ;; uncomment the following lines
+         ;; ("C-c C-j" . lsp-find-definition)
+         ;; ("C-c C-d" . lsp-describe-thing-at-point)
+         )
+  :hook ((go-mode . lsp-deferred)
+         (before-save . lsp-format-buffer)
+         (before-save . lsp-organize-imports)))
+
+(use-package org-mode
+  :ensure f
+  :init
+  (setq org-directory "~/notes/org")
+  (setq org-default-notes-file (concat org-directory "/notes/notes.org"))
+  (setq org-refile-targets '(("notes.org" :maxlevel . 6)))
+  (setq org-completion-use-ido t)
+  ;;https://lists.gnu.org/archive/html/emacs-orgmode/2008-05/msg00039.html
+  (defun my-link-to-line-number-in-c-mode ()
+    "When in c-mode, use line number as search item."
+    (when (eq major-mode 'c-mode)
+      (number-to-string (org-current-line))))
+
+  (add-hook 'org-create-file-search-functions
+	  'my-link-to-line-number-in-c-mode)
+
+  (setq org-capture-templates
+      '(("c" "Code" entry (file+headline "~/notes/notes.org" "Scratch")
+	 "** Snippet\n %i\n%a")))
+  (add-hook 'org-mode-hook 'flyspell-mode)
+  :bind ("C-c c" . org-capture)
+  )
+
+(use-package rust-mode
+  :hook (rust-mode . lsp))
+
+(use-package cargo
+  :hook (rust-mode . cargo-minor-mode))
+
+(use-package flycheck-rust
+  :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
 (use-package lsp-mode
   :requires hydra helm helm-lsp
+  :bind ("C-." . lsp-find-definition)
+  ;; reformat code and add missing (or remove old) imports
+  :hook ((before-save . lsp-format-buffer)
+         (go-mode . lsp-deferred)
+         (before-save . lsp-organize-imports))
   :config
   (setq lsp-prefer-flymake nil ;; Prefer using lsp-ui (flycheck) over flymake.
         lsp-enable-xref t)
@@ -1326,6 +1316,7 @@ in compilation mode."
   (add-hook 'rust-mode-hook #'lsp)
   (add-hook 'python-mode-hook #'lsp)
   (add-hook 'php-mode-hook #'lsp)
+  (add-hook 'go-mode-hook #'lsp)
 
   (setq netrom--general-lsp-hydra-heads
         '(;; Xref
@@ -1367,6 +1358,17 @@ in compilation mode."
   (add-hook 'lsp-mode-hook
             (lambda () (local-set-key (kbd "C-c C-l") 'netrom/lsp-hydra/body))))
 
+(use-package lsp-java :ensure t :after lsp
+  :config
+  (add-hook 'java-mode-hook 'lsp)
+)
+
+(use-package dap-mode
+  :ensure t :after lsp-mode
+  :config
+  (dap-mode t)
+  (dap-ui-mode t))
+
 (use-package lsp-ui
   :requires lsp-mode flycheck
   :config
@@ -1387,6 +1389,95 @@ in compilation mode."
   ;;(define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
 
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+(use-package treemacs
+  :ensure t
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :config
+  (progn
+    (setq treemacs-collapse-dirs                 (if treemacs-python-executable 3 0)
+          treemacs-deferred-git-apply-delay      0.5
+          treemacs-directory-name-transformer    #'identity
+          treemacs-display-in-side-window        t
+          treemacs-eldoc-display                 t
+          treemacs-file-event-delay              5000
+          treemacs-file-extension-regex          treemacs-last-period-regex-value
+          treemacs-file-follow-delay             0.2
+          treemacs-file-name-transformer         #'identity
+          treemacs-follow-after-init             t
+          treemacs-git-command-pipe              ""
+          treemacs-goto-tag-strategy             'refetch-index
+          treemacs-indentation                   2
+          treemacs-indentation-string            " "
+          treemacs-is-never-other-window         nil
+          treemacs-max-git-entries               5000
+          treemacs-missing-project-action        'ask
+          treemacs-no-png-images                 nil
+          treemacs-no-delete-other-windows       t
+          treemacs-project-follow-cleanup        nil
+          treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-position                      'left
+          treemacs-recenter-distance             0.1
+          treemacs-recenter-after-file-follow    nil
+          treemacs-recenter-after-tag-follow     nil
+          treemacs-recenter-after-project-jump   'always
+          treemacs-recenter-after-project-expand 'on-distance
+          treemacs-show-cursor                   nil
+          treemacs-show-hidden-files             t
+          treemacs-silent-filewatch              nil
+          treemacs-silent-refresh                nil
+          treemacs-sorting                       'alphabetic-asc
+          treemacs-space-between-root-nodes      t
+          treemacs-tag-follow-cleanup            t
+          treemacs-tag-follow-delay              1.5
+          treemacs-width                         35)
+
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    ;;(treemacs-resize-icons 44)
+
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode t)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple))))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
+
+(use-package treemacs-evil
+  :after treemacs evil
+  :ensure t)
+
+(use-package treemacs-projectile
+  :after treemacs projectile
+  :ensure t)
+
+(use-package treemacs-icons-dired
+  :after treemacs dired
+  :ensure t
+  :config (treemacs-icons-dired-mode))
+
+(use-package treemacs-magit
+  :after treemacs magit
+  :ensure t)
+
+(use-package treemacs-persp
+  :after treemacs persp-mode
+  :ensure t
+  :config (treemacs-set-scope-type 'Perspectives))
 
 ;; Turn on smerge-mode when opening a file with the markers in them.
 (defun sm-try-smerge ()

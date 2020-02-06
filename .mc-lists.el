@@ -28,6 +28,7 @@
         electric-newline-and-maybe-indent
         end-of-buffer
         end-of-visual-line
+        eval-buffer
         fix-word-capitalize
         fix-word-downcase
         fix-word-upcase
