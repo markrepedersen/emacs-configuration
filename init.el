@@ -20,6 +20,9 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
+;; Change all prompts to y or n
+(fset 'yes-or-no-p 'y-or-n-p)
+
 ;; key bindings
 
 ;; Make font bigger/smaller.
@@ -27,8 +30,8 @@
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-0") 'text-scale-adjust)
 
-;; Indent, untabify and clean whitespace of region or buffer.
-(global-set-key (kbd "C-c c") 'cleanup-region-or-buffer)
+;; Create shortcut of fullscreening Emacs.
+(global-set-key (kbd "C-c f s") 'toggle-frame-fullscreen)
 
 ;; Intelligent line opening that also places cursor on new line.
 (global-set-key (kbd "C-o") 'prelude-smart-open-line)

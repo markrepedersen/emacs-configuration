@@ -16,4 +16,4 @@
   ("W" magit-format-patch "format patch")
   ("$" magit-process "process"))
 
-(global-set-key (kbd "C-c C-c g") 'hydra-magit/body)
+(global-set-key (kbd "C-c g") 'hydra-magit/body)

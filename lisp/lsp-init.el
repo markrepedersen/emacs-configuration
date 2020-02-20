@@ -78,6 +78,6 @@
   ("M-r" lsp-restart-workspace)
   ("S" lsp-shutdown-workspace))
 
-(global-set-key (kbd "C-c C-c l") 'hydra-lsp/body)
+(global-set-key (kbd "C-c l") 'hydra-lsp/body)
 
 

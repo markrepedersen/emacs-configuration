@@ -49,4 +49,4 @@
     ("q" nil)
     ("." nil :color blue))
 
-(global-set-key (kbd "C-c C-c d") 'hydra-dired/body)
+(global-set-key (kbd "C-c d") 'hydra-dired/body)

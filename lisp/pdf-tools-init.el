@@ -27,7 +27,7 @@
      (use-package org-pdfview
        :ensure t))
 
-(defhydra hydra-pdftools (:color blue :hint nil)
+(defhydra hydra-pdf-tools (:color blue :hint nil)
         "
                                                                       ╭───────────┐
        Move  History   Scale/Fit     Annotations  Search/Link    Do   │ PDF Tools │
@@ -75,3 +75,5 @@
         ("N" pdf-history-forward :color red)
         ("l" image-forward-hscroll :color red)
         ("h" image-backward-hscroll :color red))
+
+(global-set-key (kbd "C-c p d f") 'hydra-pdf-tools/body)

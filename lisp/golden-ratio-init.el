@@ -1,4 +1,3 @@
-(use-package golden-ratio-scroll-screen
+(use-package golden-ratio
   :config
-  (global-set-key [remap scroll-down-command] 'golden-ratio-scroll-screen-down)
-  (global-set-key [remap scroll-up-command] 'golden-ratio-scroll-screen-up))
+  (golden-ratio-mode 1))
