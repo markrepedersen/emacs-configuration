@@ -1,3 +1,9 @@
+;; Fish shell
+(use-package fish-mode
+  :hook (fish-mode . (lambda ()
+                       (add-hook 'before-save-hook
+                                 #'fish_indent-before-save))))
+
 (use-package fish-completion
   :config
   (when (and (executable-find "fish")

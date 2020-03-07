@@ -1,9 +1,15 @@
 (use-package go-mode
-  :ensure t
-  :bind (
-         ("C-c C-j" . lsp-find-definition)
-         ("C-c C-d" . lsp-describe-thing-at-point)
-         )
-  :hook ((go-mode . lsp-deferred)
-         (before-save . lsp-format-buffer)
-         (before-save . lsp-organize-imports)))
+  :functions (go-packages-gopkgs go-update-tools)
+  :bind (:map go-mode-map
+         ([remap xref-find-definitions] . godef-jump)
+         ("C-c R" . go-remove-unused-imports)
+         ("<f1>" . godoc-at-point))
+  :config
+  ;; Env vars
+  (with-eval-after-load 'exec-path-from-shell
+    (exec-path-from-shell-copy-envs '("GOPATH" "GO111MODULE" "GOPROXY"))))
+
+
+;; Local Golang playground for short snippets
+(use-package go-playground
+  :diminish)

@@ -59,23 +59,6 @@
   (("C-s" . helm-swoop-without-pre-input)
    ("C-S-s" . helm-swoop)))
 
-(use-package helm-gtags
-  :requires helm
-  :config
-  (setq helm-gtags-maximum-candidates 1000)
-
-  ;; Enable helm-gtags-mode
-  (add-hook 'c-mode-hook 'helm-gtags-mode)
-  (add-hook 'c++-mode-hook 'helm-gtags-mode)
-  (add-hook 'asm-mode-hook 'helm-gtags-mode)
-
-  ;; Set key bindings
-  (eval-after-load "helm-gtags"
-    '(progn
-       (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-find-tag)
-       (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-       (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol))))
-
 (use-package helm-flx
   :requires (helm flx)
   :config
