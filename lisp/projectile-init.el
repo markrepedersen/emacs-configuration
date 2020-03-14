@@ -15,7 +15,47 @@
   (projectile-mode))
 
 (use-package helm-projectile
+  :after hydra
   :requires (projectile helm helm-gtags helm-ag hydra magit)
+  :hydra (projectile-hydra (:idle 1 :hint nil)
+    "
+Projectile: %(projectile-project-root)
+
+     Find                Search                Buffers                Cache/Project
+-------------------------------------------------------------------------------------------
+  _f_: File            _ss_: Ag (at point)      _b_: Switch to buffer    _p_: Switch project (find file)
+  _F_: File dwim       _sb_: Ag (buffers)       _k_: Kill all buffers    _m_: Switch project (magit)
+  _o_: Other file      _sp_: Ag (project root)                         ^^_c_: Cache clear
+  _r_: Recent file     _sf_: Ag (this file)                            ^^_x_: Remove known project
+  _d_: Dir                                                           ^^^^_X_: Cleanup non-existing
+  _w_: File other win                                                ^^^^_z_: Cache current file
+
+"
+    ("f" helm-projectile-find-file)
+    ("F" helm-projectile-find-file-dwim)
+    ("o" helm-projectile-find-other-file)
+    ("r" helm-projectile-recentf)
+    ("d" helm-projectile-find-dir)
+    ("w" projectile-find-file-other-window)
+
+    ("ss" netrom/helm-do-ag-at-point)
+    ("sb" netrom/helm-do-ag-buffers-at-point)
+    ("sp" netrom/helm-projectile-ag-at-point) ;; at project root
+    ("sf" netrom/helm-do-ag-this-file-at-point)
+
+    ("b" helm-projectile-switch-to-buffer)
+    ("k" projectile-kill-buffers)
+
+    ("p" helm-projectile-switch-project)
+    ("m" netrom/projectile-switch-project-magit :color blue)
+    ("c" projectile-invalidate-cache)
+    ("z" projectile-cache-current-file)
+    ("x" projectile-remove-known-project)
+    ("X" projectile-cleanup-known-projects)
+
+    ("M" magit-status "Magit" :color blue)
+    ("q" nil "Cancel" :color blue))
+  :bind (:map projectile-mode ("C-c p" . projectile-hydra/body))
   :config
   (setq helm-projectile-fuzzy-match t
         projectile-switch-project-action 'helm-projectile-find-file)
@@ -71,47 +111,6 @@ removed and then recreated."
     "Switch to project using projectile and run `magit-status'."
     (interactive "P")
     (let ((projectile-switch-project-action 'magit-status))
-      (helm-projectile-switch-project)))
+      (helm-projectile-switch-project))))
 
-  (defhydra projectile-hydra (:idle 1 :hint nil)
-    "
-Projectile: %(projectile-project-root)
 
-     Find                Search                Buffers                Cache/Project
--------------------------------------------------------------------------------------------
-  _f_: File            _ss_: Ag (at point)      _b_: Switch to buffer    _p_: Switch project (find file)
-  _F_: File dwim       _sb_: Ag (buffers)       _k_: Kill all buffers    _m_: Switch project (magit)
-  _o_: Other file      _sp_: Ag (project root)                         ^^_c_: Cache clear
-  _r_: Recent file     _sf_: Ag (this file)                            ^^_x_: Remove known project
-  _d_: Dir                                                           ^^^^_X_: Cleanup non-existing
-  _w_: File other win                                                ^^^^_z_: Cache current file
-
-"
-    ("f" helm-projectile-find-file)
-    ("F" helm-projectile-find-file-dwim)
-    ("o" helm-projectile-find-other-file)
-    ("r" helm-projectile-recentf)
-    ("d" helm-projectile-find-dir)
-    ("w" projectile-find-file-other-window)
-
-    ("ss" netrom/helm-do-ag-at-point)
-    ("sb" netrom/helm-do-ag-buffers-at-point)
-    ("sp" netrom/helm-projectile-ag-at-point) ;; at project root
-    ("sf" netrom/helm-do-ag-this-file-at-point)
-    ;;("g" netrom/helm-update-gtags)
-    ;;("O" projectile-multi-occur :color blue)
-
-    ("b" helm-projectile-switch-to-buffer)
-    ("k" projectile-kill-buffers)
-
-    ("p" helm-projectile-switch-project)
-    ("m" netrom/projectile-switch-project-magit :color blue)
-    ("c" projectile-invalidate-cache)
-    ("z" projectile-cache-current-file)
-    ("x" projectile-remove-known-project)
-    ("X" projectile-cleanup-known-projects)
-
-    ("M" magit-status "Magit" :color blue)
-    ("q" nil "Cancel" :color blue))
-
-  (define-key projectile-mode-map projectile-keymap-prefix 'projectile-hydra/body))

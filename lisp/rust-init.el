@@ -5,49 +5,30 @@
   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package rust-mode
-  :demand
+  :after hydra
+  :hydra (hydra-rust (:exit t :hint nil)
+		     ("b" cargo-process-build "Build" :column "Cargo")
+		     ("r" cargo-process-run "Run")
+		     ("R" cargo-process-run-bin "Run (specific)")
+		     ("t" cargo-process-test "Test")
+		     ("c" cargo-process-clean "Clean")
+
+		     ("d" cargo-process-doc "Doc" :column "")
+		     ("D" cargo-process-doc-open "Doc (open)")
+		     ("u" cargo-process-update "Update")
+		     ("C" cargo-process-check "Check")
+		     ("a" cargo-process-audit "Audit")
+		     ("C-c" cargo-process-clippy "Clippy")
+
+		     ("n" next-error "Next" :column "Errors")
+		     ("N" next-error-skip-warnings "Next, skip warnings")
+		     ("p" previous-error "Previous")
+		     ("f" first-error "First")
+		     ("k" kill-compilation "Stop")
+		     ("q" nil "Cancel" :color blue))
+  :bind (:map rust-mode-map ("C-c r" . hydra-rust/body))
   :config
-  (defun netrom/toggle-rust-backtrace ()
-    "Toggle between Rust backtrace enabled and disabled."
-    (interactive)
-    (if (not cargo-process--enable-rust-backtrace)
-        (setq cargo-process--enable-rust-backtrace t)
-      (setq cargo-process--enable-rust-backtrace nil)))
-
-  (defun netrom/rust-backtrace-string ()
-    (interactive)
-    (if (not cargo-process--enable-rust-backtrace)
-        "Backtrace: disabled"
-      "Backtrace: enabled"))
-
-  (defhydra hydra-rust (:exit t :hint nil)
-    ("b" cargo-process-build "Build" :column "Cargo")
-    ("r" cargo-process-run "Run")
-    ("R" cargo-process-run-bin "Run (specific)")
-    ("t" cargo-process-test "Test")
-    ("c" cargo-process-clean "Clean")
-
-    ("d" cargo-process-doc "Doc" :column "")
-    ("D" cargo-process-doc-open "Doc (open)")
-    ("u" cargo-process-update "Update")
-    ("C" cargo-process-check "Check")
-    ("a" cargo-process-audit "Audit")
-    ("C-c" cargo-process-clippy "Clippy")
-
-    ("n" next-error "Next" :column "Errors")
-    ("N" next-error-skip-warnings "Next, skip warnings")
-    ("p" previous-error "Previous")
-    ("f" first-error "First")
-    ("l" netrom/compilation-last-error "Last")
-    ("k" kill-compilation "Stop")
-
-    ("C-b" netrom/toggle-rust-backtrace "Toggle backtrace" :column "Misc")
-    ("q" nil "Cancel" :color blue))
-
-  (global-set-key (kbd "C-c r") 'hydra-rust/body))
-
-;; Don't show prompt unless nothing is under point or if it has to show it.
-(setq-default xref-prompt-for-identifier nil)
+  (setq-default xref-prompt-for-identifier nil))
 
 ;; Show xref results in helm.
 (use-package helm-xref

@@ -1,4 +1,7 @@
-  (defhydra hydra-dired (:hint nil :color pink)
+(use-package dired
+  :ensure nil
+  :after hydra
+  :hydra (hydra-dired (:hint nil :color blue)
     "
   _+_ mkdir          _v_iew           _m_ark             _(_ details        _i_nsert-subdir    wdired
   _C_opy             _O_ view other   _U_nmark all       _)_ omit-mode      _$_ hide-subdir    C-x C-q : edit
@@ -48,5 +51,4 @@
     ("Z" dired-do-compress)
     ("q" nil)
     ("." nil :color blue))
-
-(global-set-key (kbd "C-c d") 'hydra-dired/body)
+    :bind (:map dired-mode-map ("C-c d" . hydra-dired/body)))

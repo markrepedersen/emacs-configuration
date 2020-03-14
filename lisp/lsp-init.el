@@ -1,12 +1,13 @@
 (use-package lsp-mode
-  :hook (
-	 (rust-mode . lsp)
+  :after hydra
+  :hook ((rust-mode . lsp)
 	 (c-mode . lsp)
 	 (c++-mode . lsp)
 	 (java-mode . lsp)
 	 (groovy-mode . lsp)
 	 (python-mode . lsp))
   :bind (:map lsp-mode-map
+	      ("C-c l" . hydra-lsp/body)
               ("C-c C-d" . lsp-describe-thing-at-point)
               ([remap xref-find-definitions] . lsp-find-definition)
               ([remap xref-find-references] . lsp-find-references))
@@ -15,15 +16,7 @@
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
   (setq company-minimum-prefix-length 1)
   (setq company-idle-delay 0.0)
-  :config
-  (unbind-key "M-n" lsp-signature-mode-map)
-  (unbind-key "M-p" lsp-signature-mode-map)
-  (setq lsp-idle-delay 0.1000)
-  (setq lsp-prefer-capf t)
-  (setq lsp-prefer-flymake nil) ;; Prefer using lsp-ui (flycheck) 
-  (setq lsp-enable-xref t)
-  (setq lsp-keep-workspace-alive nil) ; Auto-kill LSP server
-  (defhydra hydra-lsp (:exit t :hint nil)
+  :hydra (hydra-lsp (:exit t :hint nil)
     "
  Buffer^^               Server^^                   Symbol
 -------------------------------------------------------------------------------------
@@ -44,9 +37,14 @@
     ("M-s" lsp-describe-session)
     ("M-r" lsp-restart-workspace)
     ("S" lsp-shutdown-workspace))
-
-  (global-set-key (kbd "C-c l") 'hydra-lsp/body)
-  
+  :config
+  (unbind-key "M-n" lsp-signature-mode-map)
+  (unbind-key "M-p" lsp-signature-mode-map)
+  (setq lsp-idle-delay 0.1000)
+  (setq lsp-prefer-capf t)
+  (setq lsp-prefer-flymake nil) ;; Prefer using lsp-ui (flycheck) 
+  (setq lsp-enable-xref t)
+  (setq lsp-keep-workspace-alive nil) ; Auto-kill LSP server
   (use-package helm-lsp
     :config
     (defun netrom/helm-lsp-workspace-symbol-at-point ()

@@ -1,5 +1,15 @@
 (use-package flycheck
-  :requires helm-flycheck hydra flycheck-pycheckers flycheck-inline
+  :requires helm-flycheck flycheck-pycheckers flycheck-inline
+  :after hydra
+  :hydra (flycheck-hydra (:pre  (flycheck-list-errors) :post (quit-windows-on "*Flycheck errors*") :hint nil)
+			 "Errors"
+			 ("f"  flycheck-error-list-set-filter                            "Filter")
+			 ("j"  flycheck-next-error                                       "Next")
+			 ("k"  flycheck-previous-error                                   "Previous")
+			 ("gg" flycheck-first-error                                      "First")
+			 ("G"  (progn (goto-char (point-max)) (flycheck-previous-error)) "Last")
+			 ("q"  nil))
+  :bind (:map flycheck-mode ("C-c f" . flycheck-hydra))
   :config
   (progn
     ;; C++11
@@ -28,20 +38,7 @@
     (add-hook 'prog-mode-hook 'flycheck-mode)
 
     ;; Enable inline errors/warnings/info etc.
-    (flycheck-inline-mode)
-
-    ;; Navigate flycheck errors more easily.
-    (defhydra flycheck-hydra
-      (:pre  (flycheck-list-errors)
-             :post (quit-windows-on "*Flycheck errors*")
-             :hint nil)
-      "Errors"
-      ("f"  flycheck-error-list-set-filter                            "Filter")
-      ("j"  flycheck-next-error                                       "Next")
-      ("k"  flycheck-previous-error                                   "Previous")
-      ("gg" flycheck-first-error                                      "First")
-      ("G"  (progn (goto-char (point-max)) (flycheck-previous-error)) "Last")
-      ("q"  nil))))
+    (flycheck-inline-mode)))
 
 (use-package flycheck-inline)
 

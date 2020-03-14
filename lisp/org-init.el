@@ -18,5 +18,4 @@
         '(("c" "Code" entry (file+headline "~/notes/notes.org" "Scratch")
            "** Snippet\n %i\n%a")))
   (add-hook 'org-mode-hook 'flyspell-mode)
-  :bind ("C-c c" . org-capture)
-  )
+  :bind (:map org-mode-map ("C-c c" . org-capture)))

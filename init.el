@@ -20,6 +20,20 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
+(use-package use-package-hydra)
+
+(setq enable-recursive-minibuffers t)
+
+(minibuffer-depth-indicate-mode)
+
+(defun helper/kill-minibuffer ()
+  "Exit the minibuffer if it is active."
+  (when (and (>= (recursion-depth) 1)
+           (active-minibuffer-window))
+    (abort-recursive-edit)))
+
+(add-hook #'mouse-leave-buffer-hook #'helper/kill-minibuffer)
+
 ;; Change all prompts to y or n
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -27,7 +41,6 @@
 (menu-bar-mode -1) ;; minimal chrome
 (scroll-bar-mode -1) ;; disable scroll bars
 (setq-default truncate-lines 1) ;; no wordwrap
-
 
 (column-number-mode 1) ;; To know which column stack trace refers to.
 

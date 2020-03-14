@@ -9,13 +9,25 @@
 
 (use-package doom-themes
   :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
   (load-theme 'doom-outrun-electric t)
-
-  ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
-  
-  ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
+
+(use-package theme-looper
+  :after hydra doom-themes
+  :bind (:map global-map ("C-c C-c t" . hydra-theme-looper/body))
+  :hydra (hydra-theme-looper (:color blue :hint nil)
+			     "toggle themes"
+			     ("n" theme-looper-enable-next-theme "next" :column "Switch")
+			     ("p" theme-looper-enable-previous-theme "previous"))
+  :config
+  (theme-looper-set-favorite-themes '(doom-one
+				      doom-acario-dark
+				      doom-city-lights
+				      doom-challenger-deep
+				      doom-manegarm
+				      doom-outrun-electric
+				      doom-spacegrey
+				      doom-tomorrow-day)))
