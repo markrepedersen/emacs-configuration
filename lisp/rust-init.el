@@ -5,12 +5,8 @@
   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package rust-mode
-  :requires cargo hydra
-  :hook (rust-mode . lsp)
+  :demand
   :config
-  (setq rust-format-on-save t)
-  (define-key rust-mode-map (kbd "C-c f") 'rust-format-buffer)
-
   (defun netrom/toggle-rust-backtrace ()
     "Toggle between Rust backtrace enabled and disabled."
     (interactive)
@@ -24,11 +20,7 @@
         "Backtrace: disabled"
       "Backtrace: enabled"))
 
-  (defhydra rust-cargo-hydra ()
-    "
-%(netrom/rust-backtrace-string)
-
-"
+  (defhydra hydra-rust (:exit t :hint nil)
     ("b" cargo-process-build "Build" :column "Cargo")
     ("r" cargo-process-run "Run")
     ("R" cargo-process-run-bin "Run (specific)")
@@ -52,9 +44,7 @@
     ("C-b" netrom/toggle-rust-backtrace "Toggle backtrace" :column "Misc")
     ("q" nil "Cancel" :color blue))
 
-  (define-key rust-mode-map (kbd "C-c C-c") 'rust-cargo-hydra/body))
-
-;; Xref
+  (global-set-key (kbd "C-c r") 'hydra-rust/body))
 
 ;; Don't show prompt unless nothing is under point or if it has to show it.
 (setq-default xref-prompt-for-identifier nil)

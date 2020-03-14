@@ -1,10 +1,21 @@
-(use-package poet-theme
-  :hook (variable-pitch-mode)
+(use-package all-the-icons
+  :if window-system
   :config
-  (set-face-attribute 'default nil :family "Iosevka" :height 130)
-  (set-face-attribute 'fixed-pitch nil :family "Iosevka")
-  (set-face-attribute 'variable-pitch nil :family "Baskerville")
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . light)))
+  (when (not (member "all-the-icons" (font-family-list)))
+    (all-the-icons-install-fonts t)))
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
 
-(load-theme 'poet-dark t)
+(use-package doom-themes
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-outrun-electric t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))

@@ -1,5 +1,11 @@
 (use-package lsp-mode
-  :commands (lsp lsp-deferred)
+  :hook (
+	 (rust-mode . lsp)
+	 (c-mode . lsp)
+	 (c++-mode . lsp)
+	 (java-mode . lsp)
+	 (groovy-mode . lsp)
+	 (python-mode . lsp))
   :bind (:map lsp-mode-map
               ("C-c C-d" . lsp-describe-thing-at-point)
               ([remap xref-find-definitions] . lsp-find-definition)
@@ -10,11 +16,37 @@
   (setq company-minimum-prefix-length 1)
   (setq company-idle-delay 0.0)
   :config
-  (setq lsp-idle-delay 0.3000)
+  (unbind-key "M-n" lsp-signature-mode-map)
+  (unbind-key "M-p" lsp-signature-mode-map)
+  (setq lsp-idle-delay 0.1000)
   (setq lsp-prefer-capf t)
   (setq lsp-prefer-flymake nil) ;; Prefer using lsp-ui (flycheck) 
   (setq lsp-enable-xref t)
   (setq lsp-keep-workspace-alive nil) ; Auto-kill LSP server
+  (defhydra hydra-lsp (:exit t :hint nil)
+    "
+ Buffer^^               Server^^                   Symbol
+-------------------------------------------------------------------------------------
+ [_f_] format           [_M-r_] restart            [_d_] declaration  [_i_] implementation  [_o_] documentation
+ [_m_] imenu            [_S_]   shutdown           [_D_] definition   [_t_] type            [_r_] rename
+ [_x_] execute action   [_M-s_] describe session   [_R_] references   [_s_] signature"
+    ("d" lsp-find-declaration)
+    ("D" lsp-ui-peek-find-definitions)
+    ("R" lsp-ui-peek-find-references)
+    ("i" lsp-ui-peek-find-implementation)
+    ("t" lsp-find-type-definition)
+    ("s" lsp-signature-help)
+    ("o" lsp-describe-thing-at-point)
+    ("r" lsp-rename)
+    ("f" lsp-format-buffer)
+    ("m" lsp-ui-imenu)
+    ("x" lsp-execute-code-action)
+    ("M-s" lsp-describe-session)
+    ("M-r" lsp-restart-workspace)
+    ("S" lsp-shutdown-workspace))
+
+  (global-set-key (kbd "C-c l") 'hydra-lsp/body)
+  
   (use-package helm-lsp
     :config
     (defun netrom/helm-lsp-workspace-symbol-at-point ()
@@ -52,40 +84,23 @@
     ;; `C-g'to close doc
     (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
     (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-    (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-    (add-hook 'lsp-mode-hook 'lsp-ui-mode)))
+    (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)))
 
-(defhydra hydra-lsp (:exit t :hint nil)
-  "
- Buffer^^               Server^^                   Symbol
--------------------------------------------------------------------------------------
- [_f_] format           [_M-r_] restart            [_d_] declaration  [_i_] implementation  [_o_] documentation
- [_m_] imenu            [_S_]   shutdown           [_D_] definition   [_t_] type            [_r_] rename
- [_x_] execute action   [_M-s_] describe session   [_R_] references   [_s_] signature"
-  ("d" lsp-find-declaration)
-  ("D" lsp-ui-peek-find-definitions)
-  ("R" lsp-ui-peek-find-references)
-  ("i" lsp-ui-peek-find-implementation)
-  ("t" lsp-find-type-definition)
-  ("s" lsp-signature-help)
-  ("o" lsp-describe-thing-at-point)
-  ("r" lsp-rename)
+(use-package dap-mode
+  :functions dap-hydra/nil
+  :bind (:map lsp-mode-map
+              ("C-c C-d" . dap-hydra))
+  :hook ((after-init . dap-mode)
+         (dap-mode . dap-ui-mode)
+         (dap-session-created . (lambda (_args) (dap-hydra)))
+         (dap-stopped . (lambda (_args) (dap-hydra)))
+         (dap-terminated . (lambda (_args) (dap-hydra/nil)))
 
-  ("f" lsp-format-buffer)
-  ("m" lsp-ui-imenu)
-  ("x" lsp-execute-code-action)
-
-  ("M-s" lsp-describe-session)
-  ("M-r" lsp-restart-workspace)
-  ("S" lsp-shutdown-workspace))
-
-(global-set-key (kbd "C-c l") 'hydra-lsp/body)
-
-(use-package lsp-java
-  :hook  (java-mode . lsp))
-
-(use-package lsp-python-ms
-  :hook (python-mode . lsp)
-  :config
-  (setq lsp-python-ms-executable
-	"~/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
+         (python-mode . (lambda () (require 'dap-python)))
+         (ruby-mode . (lambda () (require 'dap-ruby)))
+         (go-mode . (lambda () (require 'dap-go)))
+         (java-mode . (lambda () (require 'dap-java)))
+         ((c-mode c++-mode objc-mode swift-mode) . (lambda () (require 'dap-lldb)))
+         (php-mode . (lambda () (require 'dap-php)))
+         (elixir-mode . (lambda () (require 'dap-elixir)))
+         ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
