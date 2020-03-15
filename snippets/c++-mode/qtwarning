@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: qWarning() << "";
-# key: qw
-# --
-qWarning() << "${1:$0}";

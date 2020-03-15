@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: std::make_unique
-# key: mun
-# --
-auto $1 = std::make_unique<$2>($3);
-$0

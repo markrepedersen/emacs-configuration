@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: qCritical().nospace() << "";
-# key: qcn
-# --
-qCritical().nospace() << "${1:$0}";
