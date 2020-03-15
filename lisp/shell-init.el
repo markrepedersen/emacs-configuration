@@ -85,7 +85,7 @@
 (use-package shell-pop
   :bind ("C-t" . shell-pop)
   :init (setq shell-pop-window-size 40
-	      shell-pop-window-position "right"
+	      shell-pop-window-position "bottom"
               shell-pop-shell-type
               (cond ((fboundp 'vterm) '("vterm" "*vterm*" #'vterm))
                     (sys/win32p '("eshell" "*eshell*" #'eshell))

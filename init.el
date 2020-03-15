@@ -22,6 +22,8 @@
 
 (use-package use-package-hydra)
 
+(setq load-prefer-newer t)
+
 (setq enable-recursive-minibuffers t)
 
 (minibuffer-depth-indicate-mode)
@@ -81,10 +83,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("e1ecb0536abec692b5a5e845067d75273fe36f24d01210bf0aa5842f2a7e029f" "777a3a89c0b7436e37f6fa8f350cbbff80bcc1255f0c16ab7c1e82041b06fccd" "d5f8099d98174116cba9912fe2a0c3196a7cd405d12fa6b9375c55fc510988b5" "7aaee3a00f6eb16836f5b28bdccde9e1079654060d26ce4b8f49b56689c51904" "ac2ca460db1668a48c35c4d0fd842e5d2ce2d4e8567a7903b76438f2750826cd" "6973f93f55e4a6ef99aa34e10cd476bc59e2f0c192b46ec00032fe5771afd9ad" "b11699e28cc2f6c34fa6336e67d443be89fadb6a9b60de0b1594f31340ea87e4" "c19e5291471680e72d8bd98f8d6e84f781754a9e8fc089536cda3f0b7c3550e3" default))
  '(package-selected-packages
-   '(dap-ui doom-themes zenburn-theme zenburn use-package treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil smartparens shell-pop rainbow-mode rainbow-delimiters pretty-mode org-pdfview multiple-cursors lsp-ui lsp-treemacs lsp-java indent-guide highlight-thing highlight-numbers helm-xref helm-swoop helm-projectile helm-lsp helm-gtags helm-flx helm-c-yasnippet helm-ag golden-ratio-scroll-screen go-mode flycheck-rust flycheck-pycheckers flycheck-inline fic-mode exec-path-from-shell drag-stuff company-lsp company-flx cargo beacon anzu)))
+   '(emms-info-mediainfo emms zenburn-theme zenburn xterm-color vterm use-package-hydra treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode theme-looper smartparens shell-pop rainbow-mode rainbow-delimiters qml-mode pretty-mode poet-theme org-pdfview notmuch multiple-cursors mu4e-alert modern-cpp-font-lock lsp-ui lsp-python-ms lsp-java indent-guide ibuffer-projectile highlight-thing highlight-numbers highlight-doxygen helm-xref helm-swoop helm-projectile helm-lsp helm-gtags helm-flx helm-c-yasnippet helm-ag gscholar-bibtex golden-ratio-scroll-screen golden-ratio go-tag go-playground go-impl go-gen-test go-fill-struct go-dlv flycheck-rust flycheck-pycheckers flycheck-inline flycheck-golangci-lint fish-mode fish-completion fic-mode expand-region exec-path-from-shell engine-mode easy-kill-extras drag-stuff doom-themes doom-modeline dashboard dap-mode company-lsp company-flx company-auctex cmake-font-lock ccls cargo calfw-org calfw-ical calfw bibclean-format beacon auto-dictionary auctex-latexmk anzu)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

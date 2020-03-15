@@ -8,7 +8,6 @@
 	 (python-mode . lsp))
   :bind (:map lsp-mode-map
 	      ("C-c l" . hydra-lsp/body)
-              ("C-c C-d" . lsp-describe-thing-at-point)
               ([remap xref-find-definitions] . lsp-find-definition)
               ([remap xref-find-references] . lsp-find-references))
   :init
@@ -85,14 +84,11 @@
     (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)))
 
 (use-package dap-mode
-  :functions dap-hydra/nil
-  :bind (:map lsp-mode-map
-              ("C-c C-d" . dap-hydra))
+  :bind (:map lsp-mode-map ("C-c C-d" . dap-hydra))
   :hook ((after-init . dap-mode)
          (dap-mode . dap-ui-mode)
          (dap-session-created . (lambda (_args) (dap-hydra)))
          (dap-stopped . (lambda (_args) (dap-hydra)))
-         (dap-terminated . (lambda (_args) (dap-hydra/nil)))
 
          (python-mode . (lambda () (require 'dap-python)))
          (ruby-mode . (lambda () (require 'dap-ruby)))
