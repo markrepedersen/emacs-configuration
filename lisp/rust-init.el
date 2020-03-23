@@ -1,4 +1,6 @@
 (use-package cargo
+  :config
+  (setq cargo-process--enable-rust-backtrace t)
   :hook (rust-mode . cargo-minor-mode))
 
 (use-package flycheck-rust
