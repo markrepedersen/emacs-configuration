@@ -1,4 +1,5 @@
 (use-package cmake-font-lock
+  :defer t
   :config
   (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
   (add-hook 'cmake-mode-hook 'cmake-font-lock-activate))
@@ -6,11 +7,13 @@
 ;; adds font-lock highlighting for modern C++ upto C++17
 ;; https://github.com/ludwigpacifici/modern-cpp-font-lock
 (use-package modern-cpp-font-lock
+  :defer t
   :hook (c++-mode . modern-c++-font-lock-mode))
 
 ;; ccls: Emacs client for ccls, a C/C++ language server
 ;; https://github.com/MaskRay/emacs-ccls
 (use-package ccls
+  :defer t
   :hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda () (require 'ccls)))
   :init
   (setq ccls-executable "/usr/local/bin/ccls")
@@ -93,19 +96,3 @@
     (interactive)
     (lsp-ui-peek-find-custom "textDocument/references"
                              (plist-put (lsp--text-document-position-params) :role 16))))
-
-;; (ccls-xref-find-custom "$ccls/base")
-;; (ccls-xref-find-custom "$ccls/callers")
-;; Use lsp-goto-implementation or lsp-ui-peek-find-implementation for derived types/functions
-;; (ccls-xref-find-custom "$ccls/vars")
-
-;; ;; Alternatively, use lsp-ui-peek interface
-;; (lsp-ui-peek-find-custom 'base "$ccls/base")
-;; (lsp-ui-peek-find-custom 'callers "$ccls/callers")
-;; (lsp-ui-peek-find-custom 'random "$ccls/random") ;; jump to a random declaration
-
-;; (ccls-member-hierarchy)
-;; (ccls-call-hierarchy nil) ; caller hierarchy
-;; (ccls-call-hierarchy t) ; callee hierarchy
-;; (ccls-inheritance-hierarchy nil) ; base hierarchy
-;; (ccls-inheritance-hierarchy t) ; derived hierarchy

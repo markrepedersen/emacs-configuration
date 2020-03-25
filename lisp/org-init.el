@@ -9,7 +9,6 @@
   (setq org-completion-use-ido t)
   (setq org-clock-persist 'history)
   (org-clock-persistence-insinuate)
-  :hook flyspell-mode
   :bind (("C-c o" . hydra-org/body))
   :hydra (hydra-org (:exit t :hint nil :color blue)
 		    "Org mode"

@@ -1,15 +1,28 @@
-(use-package auctex-latexmk)
+(use-package auctex-latexmk
+  :defer t
+  :config
+  (auctex-latexmk-setup)
+  (setq auctex-latexmk-inherit-TeX-PDF-mode t))
+
+(use-package reftex
+  :defer t
+  :config
+  (setq reftex-cite-prompt-optional-args t)) ;; Prompt for empty optional arguments in cite
+
+(use-package company-auctex
+  :defer t
+  :init (company-auctex-init))
 
 (use-package tex
   :ensure auctex
+  :defer t
   :mode ("\\.tex\\'" . latex-mode)
   :config (progn
 	    (setq TeX-source-correlate-mode t)
 	    (setq TeX-source-correlate-method 'synctex)
-	    (require 'reftex)
+	    (setq TeX-auto-save t)
+	    (setq TeX-parse-self t)
 	    (setq reftex-plug-into-AUCTeX t)
-	    (require 'auctex-latexmk)
-	    (auctex-latexmk-setup)
 	    (pdf-tools-install)
 	    (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
 		  TeX-source-correlate-start-server t)
@@ -20,5 +33,4 @@
 		      (lambda ()
 			(reftex-mode t)
 			(flyspell-mode t)))
-	    )
-  )
+	    ))

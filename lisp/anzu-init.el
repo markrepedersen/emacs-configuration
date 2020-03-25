@@ -1,6 +1,6 @@
 ;; Shows the number of matches for searches.
 (use-package anzu
-  :defer
+  :defer t
   :config
   (defalias 'qr 'anzu-query-replace)
   (defalias 'qrr 'anzu-query-replace-regexp)

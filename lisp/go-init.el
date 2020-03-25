@@ -1,4 +1,5 @@
 (use-package go-mode
+  :defer t
   :functions (go-packages-gopkgs go-update-tools)
   :bind (:map go-mode-map
          ([remap xref-find-definitions] . godef-jump)
@@ -8,8 +9,3 @@
   ;; Env vars
   (with-eval-after-load 'exec-path-from-shell
     (exec-path-from-shell-copy-envs '("GOPATH" "GO111MODULE" "GOPROXY"))))
-
-
-;; Local Golang playground for short snippets
-(use-package go-playground
-  :diminish)

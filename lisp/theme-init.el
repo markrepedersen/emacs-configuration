@@ -4,7 +4,6 @@
   (when (not (member "all-the-icons" (font-family-list)))
     (all-the-icons-install-fonts t)))
 (use-package doom-modeline
-  :ensure t
   :init (doom-modeline-mode 1))
 
 (use-package doom-themes

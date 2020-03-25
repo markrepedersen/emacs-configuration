@@ -1,4 +1,5 @@
 (use-package yasnippet
+  :defer t
   :requires helm
   :config
   (defun shk-yas/helm-prompt (prompt choices &optional display-fn)

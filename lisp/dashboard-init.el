@@ -1,5 +1,5 @@
 (use-package dashboard
-    :ensure t
+    :defer t
     :diminish dashboard-mode
     :config
     (setq dashboard-banner-logo-title "your custom text")

@@ -1,4 +1,5 @@
 (use-package undo-tree
+  :defer t
   :config
   (global-undo-tree-mode)
   (lambda() (defadvice undo-tree-make-history-save-file-name

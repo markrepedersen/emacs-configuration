@@ -1,4 +1,5 @@
 (use-package helm
+  :defer t
   :config
   ;; To get the best fuzzy completion style via helm: (via helm docs)
   ;; > For a better experience, if you don't know what to use, set
@@ -60,12 +61,14 @@
    ("C-S-s" . helm-swoop)))
 
 (use-package helm-flx
+  :defer t
   :requires (helm flx)
   :config
   ;; Use flx for better search results.
   (helm-flx-mode +1))
 
 (use-package helm-ag
+  :defer t
   :requires helm
   :config
   (setq helm-ag-base-command "ag --nocolor --nogroup --smart-case"
