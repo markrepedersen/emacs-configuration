@@ -11,6 +11,7 @@
               ([remap xref-find-definitions] . lsp-find-definition)
               ([remap xref-find-references] . lsp-find-references))
   :init
+  (setq lsp-rust-server 'rust-analyzer)
   (setq gc-cons-threshold 100000000)
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
   (setq company-minimum-prefix-length 1)

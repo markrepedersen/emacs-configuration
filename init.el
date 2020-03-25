@@ -44,6 +44,8 @@
 (scroll-bar-mode -1) ;; disable scroll bars
 (setq-default truncate-lines 1) ;; no wordwrap
 
+(set-face-attribute 'region nil :background "#666" :foreground "#ffffff")
+
 (column-number-mode 1) ;; To know which column stack trace refers to.
 
 (blink-cursor-mode 0)    ;; Reduce visual noise
@@ -72,7 +74,10 @@ With negative N, comment out original line and use the absolute value."
             (comment-region (line-beginning-position) (line-end-position)))
         (forward-line 1)
         (forward-char pos)))))
+
 (global-set-key (kbd "C-d") 'duplicate-line-or-region)
+
+(global-set-key (kbd "C-k") 'kill-whole-line)
 
 ;; Make font bigger/smaller.
 (global-set-key (kbd "C-+") 'text-scale-increase)
@@ -108,7 +113,7 @@ With negative N, comment out original line and use the absolute value."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(emms-info-mediainfo emms zenburn-theme zenburn xterm-color vterm use-package-hydra treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode theme-looper smartparens shell-pop rainbow-mode rainbow-delimiters qml-mode pretty-mode poet-theme org-pdfview notmuch multiple-cursors mu4e-alert modern-cpp-font-lock lsp-ui lsp-python-ms lsp-java indent-guide ibuffer-projectile highlight-thing highlight-numbers highlight-doxygen helm-xref helm-swoop helm-projectile helm-lsp helm-gtags helm-flx helm-c-yasnippet helm-ag gscholar-bibtex golden-ratio-scroll-screen golden-ratio go-tag go-playground go-impl go-gen-test go-fill-struct go-dlv flycheck-rust flycheck-pycheckers flycheck-inline flycheck-golangci-lint fish-mode fish-completion fic-mode expand-region exec-path-from-shell engine-mode easy-kill-extras drag-stuff doom-themes doom-modeline dashboard dap-mode company-lsp company-flx company-auctex cmake-font-lock ccls cargo calfw-org calfw-ical calfw bibclean-format beacon auto-dictionary auctex-latexmk anzu)))
+   '(rustic emms-info-mediainfo emms zenburn-theme zenburn xterm-color vterm use-package-hydra treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode theme-looper smartparens shell-pop rainbow-mode rainbow-delimiters qml-mode pretty-mode poet-theme org-pdfview notmuch multiple-cursors mu4e-alert modern-cpp-font-lock lsp-ui lsp-python-ms lsp-java indent-guide ibuffer-projectile highlight-thing highlight-numbers highlight-doxygen helm-xref helm-swoop helm-projectile helm-lsp helm-gtags helm-flx helm-c-yasnippet helm-ag gscholar-bibtex golden-ratio-scroll-screen golden-ratio go-tag go-playground go-impl go-gen-test go-fill-struct go-dlv flycheck-rust flycheck-pycheckers flycheck-inline flycheck-golangci-lint fish-mode fish-completion fic-mode expand-region exec-path-from-shell engine-mode easy-kill-extras drag-stuff doom-themes doom-modeline dashboard dap-mode company-lsp company-flx company-auctex cmake-font-lock ccls cargo calfw-org calfw-ical calfw bibclean-format beacon auto-dictionary auctex-latexmk anzu)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
