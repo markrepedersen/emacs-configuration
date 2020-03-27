@@ -1,15 +1,14 @@
 (use-package org-mode
   :after hydra
-  :ensure nil
+  :ensure f
+  :bind (("C-c o" . hydra-org/body))
   :config
-  (setq org-agenda-files '("~/Dropbox/org/"))
-  (setq org-directory "~/Dropbox/org")
-  (setq org-default-notes-file (concat org-directory "~/Dropbox/org/notes.org"))
+  (org-agenda-start-with-follow-mode t)
+  :init
+  (setq org-directory "~/notes/org")
+  (setq org-default-notes-file (concat org-directory "/notes/notes.org"))
   (setq org-refile-targets '(("notes.org" :maxlevel . 6)))
   (setq org-completion-use-ido t)
-  (setq org-clock-persist 'history)
-  (org-clock-persistence-insinuate)
-  :bind (("C-c o" . hydra-org/body))
   :hydra (hydra-org (:exit t :hint nil :color blue)
 		    "Org mode"
 		    ("i" (lambda () (interactive) (org-clock-in '(4))) "Clock in" :column "Clock")

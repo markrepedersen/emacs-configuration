@@ -1,4 +1,5 @@
 (use-package lsp-mode
+  :defer t
   :after hydra
   :hook ((rust-mode . lsp)
 	 (c-mode . lsp)
@@ -17,26 +18,26 @@
   (setq company-minimum-prefix-length 1)
   (setq company-idle-delay 0.0)
   :hydra (hydra-lsp (:exit t :hint nil)
-    "
+		    "
  Buffer^^               Server^^                   Symbol
 -------------------------------------------------------------------------------------
  [_f_] format           [_M-r_] restart            [_d_] declaration  [_i_] implementation  [_o_] documentation
  [_m_] imenu            [_S_]   shutdown           [_D_] definition   [_t_] type            [_r_] rename
  [_x_] execute action   [_M-s_] describe session   [_R_] references   [_s_] signature"
-    ("d" lsp-find-declaration)
-    ("D" lsp-ui-peek-find-definitions)
-    ("R" lsp-ui-peek-find-references)
-    ("i" lsp-ui-peek-find-implementation)
-    ("t" lsp-find-type-definition)
-    ("s" lsp-signature-help)
-    ("o" lsp-describe-thing-at-point)
-    ("r" lsp-rename)
-    ("f" lsp-format-buffer)
-    ("m" lsp-ui-imenu)
-    ("x" lsp-execute-code-action)
-    ("M-s" lsp-describe-session)
-    ("M-r" lsp-restart-workspace)
-    ("S" lsp-shutdown-workspace))
+		    ("d" lsp-find-declaration)
+		    ("D" lsp-ui-peek-find-definitions)
+		    ("R" lsp-ui-peek-find-references)
+		    ("i" lsp-ui-peek-find-implementation)
+		    ("t" lsp-find-type-definition)
+		    ("s" lsp-signature-help)
+		    ("o" lsp-describe-thing-at-point)
+		    ("r" lsp-rename)
+		    ("f" lsp-format-buffer)
+		    ("m" lsp-ui-imenu)
+		    ("x" lsp-execute-code-action)
+		    ("M-s" lsp-describe-session)
+		    ("M-r" lsp-restart-workspace)
+		    ("S" lsp-shutdown-workspace))
   :config
   (unbind-key "M-n" lsp-signature-mode-map)
   (unbind-key "M-p" lsp-signature-mode-map)
@@ -58,6 +59,7 @@
 	(call-interactively #'helm-lsp-global-workspace-symbol))))
 
   (use-package lsp-ui
+    :defer t
     :requires lsp-mode flycheck
     :init (setq lsp-ui-doc-enable t
                 lsp-ui-doc-use-webkit nil
@@ -66,12 +68,10 @@
                 lsp-ui-doc-position 'at-point
                 lsp-ui-doc-border (face-foreground 'default)
                 lsp-eldoc-enable-hover nil ; Disable eldoc displays in minibuffer
-
                 lsp-ui-sideline-enable t
                 lsp-ui-sideline-show-hover nil
                 lsp-ui-sideline-show-diagnostics nil
                 lsp-ui-sideline-ignore-duplicate t
-
                 lsp-ui-imenu-enable t
                 lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
                                       ,(face-foreground 'font-lock-string-face)
@@ -85,6 +85,7 @@
     (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)))
 
 (use-package dap-mode
+  :defer t
   :bind (:map lsp-mode-map ("C-c C-d" . dap-hydra))
   :hook ((after-init . dap-mode)
          (dap-mode . dap-ui-mode)
