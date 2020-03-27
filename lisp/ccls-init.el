@@ -1,11 +1,15 @@
-(use-package ccls
-  :hook ((c-mode c++-mode objc-mode) .
-         (lambda () (require 'ccls) (lsp)))
-  :custom
-  (ccls-executable (executable-find "ccls"))
-  (ccls-sem-highlight-method 'font-lock)
-  (ccls-enable-skipped-ranges nil))
+;; (use-package cmake-mode)
 
-(use-package modern-cpp-font-lock
-  :diminish t
-  :init (modern-c++-font-lock-global-mode t))
+;; (use-package cmake-font-lock
+;;   :config
+;;   (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
+;;   (add-hook 'cmake-mode-hook 'cmake-font-lock-activate))
+
+;; (use-package modern-cpp-font-lock
+;;   :hook (c++-mode . modern-c++-font-lock-mode))
+
+;; (use-package ccls
+;;   :init
+;;   (setq ccls-executable (executable-find "ccls"))
+;;   :config
+;;   (setq ccls-sem-highlight-method 'font-lock))

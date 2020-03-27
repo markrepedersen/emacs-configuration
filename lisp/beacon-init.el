@@ -1,6 +1,5 @@
 (use-package beacon
-  :demand t
-  :init
+  :config
   (beacon-mode 1)
   (defun backward-paragraph-blink ()
     (interactive)

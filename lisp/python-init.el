@@ -1,6 +1,6 @@
 (use-package elpy
   :defer t
-  :init
+  :config
   (elpy-enable))
 
 (use-package lsp-python-ms
