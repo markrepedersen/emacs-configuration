@@ -121,7 +121,8 @@
 
 (eval-when-compile
   (require 'use-package))
-  
+
+(use-package gnu-elpa-keyring-update)
 (use-package use-package-hydra)
 
 (eval-and-compile
@@ -188,13 +189,13 @@
  '(dired-recursive-copies 'always)
  '(dired-recursive-deletes 'always)
  '(global-auto-revert-non-file-buffers t)
- '(highlight-indent-guides-auto-character-face-perc 7 t)
- '(highlight-indent-guides-delay 0 t)
- '(highlight-indent-guides-method 'character t)
- '(highlight-indent-guides-responsive 'top t)
+ '(highlight-indent-guides-auto-character-face-perc 7)
+ '(highlight-indent-guides-delay 0)
+ '(highlight-indent-guides-method 'character)
+ '(highlight-indent-guides-responsive 'top)
  '(load-prefer-newer t)
  '(package-selected-packages
-   '(helm-c-yasnippet undo-tree theme-looper xterm-color use-package-hydra typescript-mode smartparens shell-pop repl-toggle rainbow-mode rainbow-delimiters org-pdfview multiple-cursors magit lsp-ui lsp-python-ms lsp-java iedit ibuffer-projectile highlight-indent-guides helm-xref helm-swoop helm-projectile helm-lsp helm-ag groovy-mode graphql golden-ratio go-mode format-all flycheck-rust flycheck-pycheckers flycheck-inline fish-mode fish-completion fic-mode expand-region exec-path-from-shell ewal-doom-themes esup engine-mode emms elpy easy-kill-extras drag-stuff doom-modeline disk-usage dashboard dap-mode company-tabnine company-lsp company-box company-auctex cargo beacon auctex-latexmk anzu aio))
+   '(gnu-elpa-keyring-update helm-c-yasnippet undo-tree theme-looper xterm-color use-package-hydra typescript-mode smartparens shell-pop repl-toggle rainbow-mode rainbow-delimiters org-pdfview multiple-cursors magit lsp-ui lsp-python-ms lsp-java iedit ibuffer-projectile highlight-indent-guides helm-xref helm-swoop helm-projectile helm-lsp helm-ag groovy-mode graphql golden-ratio go-mode format-all flycheck-rust flycheck-pycheckers flycheck-inline fish-mode fish-completion fic-mode expand-region exec-path-from-shell ewal-doom-themes esup engine-mode emms elpy easy-kill-extras drag-stuff doom-modeline disk-usage dashboard dap-mode company-tabnine company-lsp company-box company-auctex cargo beacon auctex-latexmk anzu aio))
  '(rtog/mode-repl-alist
    '((emacs-lisp-mode . ielm)
      (python-mode . elpy-shell-switch-to-shell)

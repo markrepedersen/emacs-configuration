@@ -11,7 +11,7 @@
 
 (use-package company-auctex
   :defer t
-  :init (company-auctex-init))
+  :config (company-auctex-init))
 
 (use-package tex
   :ensure auctex
