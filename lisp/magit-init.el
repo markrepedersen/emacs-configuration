@@ -1,4 +1,5 @@
 (use-package magit
+  :defer t
   :after hydra
   :hydra (hydra-magit (:color blue :columns 4)
 		      "Magit"

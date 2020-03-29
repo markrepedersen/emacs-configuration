@@ -12,11 +12,11 @@
               ([remap xref-find-definitions] . lsp-find-definition)
               ([remap xref-find-references] . lsp-find-references))
   :init
-  (setq lsp-rust-server 'rust-analyzer)
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024)) ;; 1mb
-  (setq company-minimum-prefix-length 1)
-  (setq company-idle-delay 0.0)
+  (setq lsp-rust-server 'rust-analyzer
+	gc-cons-threshold 100000000
+	read-process-output-max (* 1024 1024)
+	company-minimum-prefix-length 1
+	company-idle-delay 0.2)
   :hydra (hydra-lsp (:exit t :hint nil)
 		    "
  Buffer^^               Server^^                   Symbol
@@ -41,48 +41,51 @@
   :config
   (unbind-key "M-n" lsp-signature-mode-map)
   (unbind-key "M-p" lsp-signature-mode-map)
-  (setq lsp-idle-delay 0.1000)
-  (setq lsp-prefer-capf t)
-  (setq lsp-prefer-flymake nil) ;; Prefer using lsp-ui (flycheck) 
-  (setq lsp-enable-xref t)
-  (setq lsp-keep-workspace-alive nil) ; Auto-kill LSP server
-  (use-package helm-lsp
-    :config
-    (defun netrom/helm-lsp-workspace-symbol-at-point ()
-      (interactive)
-      (let ((current-prefix-arg t))
-	(call-interactively #'helm-lsp-workspace-symbol)))
+  (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error")
+	lsp-idle-delay 0.1000
+	lsp-prefer-capf t
+	lsp-prefer-flymake nil 
+	lsp-enable-xref t
+	lsp-keep-workspace-alive nil))
 
-    (defun netrom/helm-lsp-global-workspace-symbol-at-point ()
-      (interactive)
-      (let ((current-prefix-arg t))
-	(call-interactively #'helm-lsp-global-workspace-symbol))))
+(use-package helm-lsp
+  :defer t
+  :config
+  (defun netrom/helm-lsp-workspace-symbol-at-point ()
+    (interactive)
+    (let ((current-prefix-arg t))
+      (call-interactively #'helm-lsp-workspace-symbol)))
 
-  (use-package lsp-ui
-    :defer t
-    :requires lsp-mode flycheck
-    :init (setq lsp-ui-doc-enable t
-                lsp-ui-doc-use-webkit nil
-                lsp-ui-doc-delay 0.2
-                lsp-ui-doc-include-signature t
-                lsp-ui-doc-position 'at-point
-                lsp-ui-doc-border (face-foreground 'default)
-                lsp-eldoc-enable-hover nil ; Disable eldoc displays in minibuffer
-                lsp-ui-sideline-enable t
-                lsp-ui-sideline-show-hover nil
-                lsp-ui-sideline-show-diagnostics nil
-                lsp-ui-sideline-ignore-duplicate t
-                lsp-ui-imenu-enable t
-                lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
-                                      ,(face-foreground 'font-lock-string-face)
-                                      ,(face-foreground 'font-lock-constant-face)
-                                      ,(face-foreground 'font-lock-variable-name-face)))
-    :config
-    (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
-    ;; `C-g'to close doc
-    (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
-    (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-    (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)))
+  (defun netrom/helm-lsp-global-workspace-symbol-at-point ()
+    (interactive)
+    (let ((current-prefix-arg t))
+      (call-interactively #'helm-lsp-global-workspace-symbol))))
+
+
+(use-package lsp-ui
+  :defer t
+  :requires lsp-mode flycheck
+  :init (setq lsp-ui-doc-enable t
+              lsp-ui-doc-use-webkit nil
+              lsp-ui-doc-delay 0.2
+              lsp-ui-doc-include-signature t
+              lsp-ui-doc-position 'at-point
+              lsp-ui-doc-border (face-foreground 'default)
+              lsp-eldoc-enable-hover nil ; Disable eldoc displays in minibuffer
+              lsp-ui-sideline-enable t
+              lsp-ui-sideline-show-hover nil
+              lsp-ui-sideline-show-diagnostics nil
+              lsp-ui-sideline-ignore-duplicate t
+              lsp-ui-imenu-enable t
+              lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
+                                    ,(face-foreground 'font-lock-string-face)
+                                    ,(face-foreground 'font-lock-constant-face)
+                                    ,(face-foreground 'font-lock-variable-name-face)))
+  :config
+  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
+  (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
+  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
 
 (use-package dap-mode
   :defer t

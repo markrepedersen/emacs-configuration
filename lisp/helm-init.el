@@ -37,7 +37,7 @@
 			("f" helm-ag-this-file "Search current buffer")
 			("f" helm-ag-clear-stack "Clear AG markers" :column "Mark")
 			("." helm-ag-pop-stack "Go back")))
-			
+
 (use-package helm-swoop
   :bind
   (("C-s" . helm-swoop-without-pre-input)

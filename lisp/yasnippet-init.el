@@ -1,7 +1,7 @@
 (use-package yasnippet
   :defer t
   :requires helm
-  :config
+  :preface
   (defun shk-yas/helm-prompt (prompt choices &optional display-fn)
     "Use helm to select a snippet. Put this into `yas/prompt-functions.'"
     (interactive)
@@ -21,20 +21,6 @@
               (signal 'quit "user quit!")
             (cdr (assoc result rmap))))
       nil))
-  (add-to-list 'yas-prompt-functions 'shk-yas/helm-prompt)
-
-  (yas-global-mode 1)
-
-  ;; Disable normal tab expansion because it often interferes with
-  ;; indentation.
-  (define-key yas-minor-mode-map (kbd "<tab>") nil)
-  (define-key yas-minor-mode-map (kbd "TAB") nil)
-  (define-key yas-minor-mode-map (kbd "C-M-y") 'yas-expand)
-
-  ;; Test if thing at cursor can expand with yas, if it can then change the color of the cursor.
-  (setq default-cursor-color (face-background 'cursor))
-  (setq yasnippet-can-fire-cursor-color "#4CB5F5")
-
   (defun yasnippet-can-fire-p (&optional field)
     (interactive)
     (setq yas--condition-cache-timestamp (current-time))
@@ -55,8 +41,6 @@
       (if (my/can-expand)
           (progn
             (set-cursor-color yasnippet-can-fire-cursor-color)
-            ;; Change back 5 seconds afterwards to avoid border cases where it stays in the "can
-            ;; expand" color when actually it can't.
             (run-at-time "5 sec" nil
                          (lambda ()
                            (set-cursor-color default-cursor-color))))
@@ -65,10 +49,18 @@
   (defun my/can-expand ()
     "Return true if right after an expandable thing."
     (or (abbrev--before-point) (yasnippet-can-fire-p)))
-
+  :config
+  (add-to-list 'yas-prompt-functions 'shk-yas/helm-prompt)
+  (yas-global-mode 1)
+  (define-key yas-minor-mode-map (kbd "<tab>") nil)
+  (define-key yas-minor-mode-map (kbd "TAB") nil)
+  (define-key yas-minor-mode-map (kbd "C-M-y") 'yas-expand)
+  (setq default-cursor-color (face-background 'cursor)
+	yasnippet-can-fire-cursor-color "#4CB5F5")
   (add-hook 'post-command-hook 'my/change-cursor-color-when-can-expand))
 
 (use-package helm-c-yasnippet
+  :defer t
   :requires yasnippet
   :bind ("C-c y" . helm-yas-complete))
 

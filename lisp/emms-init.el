@@ -1,4 +1,5 @@
 (use-package emms
+  :defer t
   :after hydra
   :hydra (hydra-emms (:color blue :columns 3)
 		     "Emacs Multimedia Player"

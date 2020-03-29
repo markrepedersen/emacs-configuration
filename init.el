@@ -1,3 +1,17 @@
+(setq package-enable-at-startup nil
+      file-name-handler-alist nil
+      message-log-max 16384
+      gc-cons-threshold 402653184
+      gc-cons-percentage 0.6
+      auto-window-vscroll nil)
+
+(add-hook 'after-init-hook
+          `(lambda ()
+             (setq file-name-handler-alist file-name-handler-alist-old
+                   gc-cons-threshold 800000
+                   gc-cons-percentage 0.1)
+             (garbage-collect)) t)
+
 (defun init-settings ()
   "Initialize good-to-have settings for all modes."
   (setq-default frame-title-format '("markrepedersen - %b"))
@@ -15,17 +29,18 @@
 		           ("org" . "http://orgmode.org/elpa/")
 			   ("melpa" . "https://melpa.org/packages/")))
   (define-constants)
-  (desktop-save-mode 1)
   (minibuffer-depth-indicate-mode)
   (fset 'yes-or-no-p 'y-or-n-p)
   (menu-bar-mode -1)
-  (tool-bar-mode -1) 
+  (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (set-face-attribute 'region nil :background "dark magenta")
   (column-number-mode 1)
   (blink-cursor-mode 0)
   (display-time-mode 1)
   (display-battery-mode 1)
+  (toggle-frame-maximized)
+  (toggle-frame-fullscreen)
   (add-hook 'prog-mode-hook 'linum-mode))
 
 (defun define-constants ()
@@ -86,8 +101,6 @@
     (executable-find "git")
     "Do we have git?")
 
-  (defvar better-gc-cons-threshold 67108864)
-
   (defvar my-load-file-dir (expand-file-name "lisp" user-emacs-directory)))
 
 (defun update-to-load-path (folder)
@@ -139,31 +152,8 @@
 	byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local)
 	enable-recursive-minibuffers t))
 
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold better-gc-cons-threshold)
-            (setq file-name-handler-alist file-name-handler-alist-original)
-            (makunbound 'file-name-handler-alist-original)))
-
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (if (boundp 'after-focus-change-function)
-                (add-function :after after-focus-change-function
-			      (lambda ()
-                                (unless (frame-focus-state)
-                                  (garbage-collect))))
-	      (add-hook 'after-focus-change-function 'garbage-collect))
-            (defun gc-minibuffer-setup-hook ()
-	      (setq gc-cons-threshold (* better-gc-cons-threshold 2)))
-
-            (defun gc-minibuffer-exit-hook ()
-	      (garbage-collect)
-	      (setq gc-cons-threshold better-gc-cons-threshold))
-
-            (add-hook 'minibuffer-setup-hook #'gc-minibuffer-setup-hook)
-            (add-hook 'minibuffer-exit-hook #'gc-minibuffer-exit-hook)))
-
 (load-directory my-load-file-dir)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -189,10 +179,10 @@
  '(dired-recursive-copies 'always)
  '(dired-recursive-deletes 'always)
  '(global-auto-revert-non-file-buffers t)
- '(highlight-indent-guides-auto-character-face-perc 7)
- '(highlight-indent-guides-delay 0)
- '(highlight-indent-guides-method 'character)
- '(highlight-indent-guides-responsive 'top)
+ '(highlight-indent-guides-auto-character-face-perc 7 t)
+ '(highlight-indent-guides-delay 0 t)
+ '(highlight-indent-guides-method 'character t)
+ '(highlight-indent-guides-responsive 'top t)
  '(load-prefer-newer t)
  '(package-selected-packages
    '(gnu-elpa-keyring-update helm-c-yasnippet undo-tree theme-looper xterm-color use-package-hydra typescript-mode smartparens shell-pop repl-toggle rainbow-mode rainbow-delimiters org-pdfview multiple-cursors magit lsp-ui lsp-python-ms lsp-java iedit ibuffer-projectile highlight-indent-guides helm-xref helm-swoop helm-projectile helm-lsp helm-ag groovy-mode graphql golden-ratio go-mode format-all flycheck-rust flycheck-pycheckers flycheck-inline fish-mode fish-completion fic-mode expand-region exec-path-from-shell ewal-doom-themes esup engine-mode emms elpy easy-kill-extras drag-stuff doom-modeline disk-usage dashboard dap-mode company-tabnine company-lsp company-box company-auctex cargo beacon auctex-latexmk anzu aio))

@@ -1,4 +1,5 @@
 (use-package groovy-mode
+  :defer t
   :ensure t
   :config
   :mode

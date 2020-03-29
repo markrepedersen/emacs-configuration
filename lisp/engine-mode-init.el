@@ -1,4 +1,5 @@
 (use-package engine-mode
+  :defer t
   :after hydra
   :hydra   (hydra-engine (:color blue)
 			 ("h" engine/search-github "github")

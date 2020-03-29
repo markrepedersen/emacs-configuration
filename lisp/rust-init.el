@@ -9,6 +9,7 @@
   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package rust-mode
+  :defer t
   :after hydra
   :hydra (hydra-rust (:exit t :hint nil)
 		     ("b" cargo-process-build "Build" :column "Cargo")
@@ -36,26 +37,19 @@
 
 ;; Show xref results in helm.
 (use-package helm-xref
+  :defer t
   :requires helm
-  :config
-  ;; Use helm-xref as the default xref show function.
-  (setq-default xref-show-xrefs-function 'helm-xref-show-xrefs)
-
-  ;; Show full filename in results instead of only basename which doesn't give enough context.
-  (setq helm-xref-candidate-formatting-function 'helm-xref-format-candidate-long)
-
-  ;; Setting `helm-xref-show-xrefs' as the xref show function breaks `find-name-dired' interactive
-  ;; search-and-replace across files, which uses `dired-do-find-regexp-and-replace'. Thus we make
-  ;; xref show results in the default way by setting `xref-show-xrefs-function' to
-  ;; `xref--show-xref-buffer' via an around-advice.
+  :preface
   (defadvice dired-do-find-regexp-and-replace
       (around netrom-no-helm-dired-do-find-regexp-and-replace activate)
     (let ((xref-show-xrefs-function 'xref--show-xref-buffer))
-      ad-do-it)))
-
-(defun netrom/xref-find-apropos-at-point (pattern)
-  "Xref find apropos at point, if anything, and show prompt for PATTERN."
-  (interactive
-   (list
-    (read-string "Xref find apropos of: " (thing-at-point 'symbol))))
-  (xref-find-apropos pattern))
+      ad-do-it))
+  (defun netrom/xref-find-apropos-at-point (pattern)
+    "Xref find apropos at point, if anything, and show prompt for PATTERN."
+    (interactive
+     (list
+      (read-string "Xref find apropos of: " (thing-at-point 'symbol))))
+    (xref-find-apropos pattern))
+  :config
+  (setq-default xref-show-xrefs-function 'helm-xref-show-xrefs)
+  (setq helm-xref-candidate-formatting-function 'helm-xref-format-candidate-long))

@@ -1,10 +1,9 @@
 (use-package shell
+  :defer t
   :ensure nil
   :hook ((shell-mode . my-shell-mode-hook)
          (comint-output-filter-functions . comint-strip-ctrl-m))
-  :init
-  (setq system-uses-terminfo nil)
-
+  :preface
   (defun my-shell-simple-send (proc command)
     "Various PROC COMMANDs pre-processing before sending to shell."
     (cond
@@ -29,10 +28,13 @@
     (local-set-key '[(shift tab)] 'comint-next-matching-input-from-input)
 
     (ansi-color-for-comint-mode-on)
-    (setq comint-input-sender 'my-shell-simple-send)))
+    (setq comint-input-sender 'my-shell-simple-send))
+  :init
+  (setq system-uses-terminfo nil))
 
 ;; ANSI & XTERM 256 color support
 (use-package xterm-color
+  :defer t
   :defines (compilation-environment
             eshell-preoutput-filter-functions
             eshell-output-filter-functions)
@@ -83,6 +85,7 @@
 
 ;; Shell Pop
 (use-package shell-pop
+  :defer t
   :bind ("C-t" . shell-pop)
   :init (setq shell-pop-window-size 40
 	      shell-pop-window-position "bottom"

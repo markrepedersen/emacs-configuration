@@ -1,9 +1,8 @@
 (use-package dashboard
-    :defer t
-    :diminish dashboard-mode
-    :config
-    (setq dashboard-banner-logo-title "your custom text")
-    (setq dashboard-startup-banner "/path/to/image")
-    (setq dashboard-items '((recents  . 10)
-                            (bookmarks . 10)))
-    (dashboard-setup-startup-hook))
+  :config
+  (setq show-week-agenda-p t
+	dashboard-set-init-info t
+	dashboard-banner-logo-title "hi"
+	dashboard-set-heading-icons t
+	dashboard-set-file-icons t)
+  (dashboard-setup-startup-hook))

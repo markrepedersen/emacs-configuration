@@ -1,4 +1,5 @@
 (use-package undo-tree
+  :defer t
   :bind (("C-z" . undo)
 	 ("C-S-z" . undo-tree-redo)
 	 ("C-c z" . undo-tree-visualize))

@@ -1,4 +1,5 @@
 (use-package pdf-tools
+  :defer t
   :after hydra
   :hydra (hydra-pdf-tools (:color blue :hint nil)
   "
