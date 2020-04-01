@@ -1,3 +1,8 @@
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
 (use-package shell
   :defer t
   :ensure nil
@@ -91,6 +96,6 @@
 	      shell-pop-window-position "bottom"
               shell-pop-shell-type
               (cond ((fboundp 'vterm) '("vterm" "*vterm*" #'vterm))
-                    (sys/win32p '("eshell" "*eshell*" #'eshell))
+                    (*sys/win32* '("eshell" "*eshell*" #'eshell))
                     (t '("terminal" "*terminal*"
                          (lambda () (term shell-pop-term-shell)))))))

@@ -1,5 +1,29 @@
+(use-package modern-cpp-font-lock
+  :diminish t
+  :init (modern-c++-font-lock-global-mode t))
+
+(use-package ccls
+  :hook ((c-mode c++-mode objc-mode) .
+         (lambda () (require 'ccls) (lsp)))
+  :config
+  (setq ccls-executable (executable-find "ccls")
+	ccls-sem-highlight-method 'font-lock
+	ccls-enable-skipped-ranges nil)
+  (lsp-register-client
+   (make-lsp-client
+    :priority 1
+    :new-connection (lsp-tramp-connection (cons ccls-executable ccls-args))
+    :major-modes '(c-mode c++-mode cuda-mode objc-mode)
+    :server-id 'ccls-remote
+    :multi-root nil
+    :remote? t
+    :notification-handlers
+    (lsp-ht ("$ccls/publishSkippedRanges" #'ccls--publish-skipped-ranges)
+            ("$ccls/publishSemanticHighlight" #'ccls--publish-semantic-highlight))
+    :initialization-options (lambda () ccls-initialization-options)
+    :library-folders-fn nil)))
+
 (use-package lsp-mode
-  :defer t
   :after hydra
   :hook ((rust-mode . lsp)
 	 (c-mode . lsp)
@@ -41,10 +65,9 @@
   :config
   (unbind-key "M-n" lsp-signature-mode-map)
   (unbind-key "M-p" lsp-signature-mode-map)
-  (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error")
-	lsp-idle-delay 0.1000
+  (setq lsp-idle-delay 0.1000
 	lsp-prefer-capf t
-	lsp-prefer-flymake nil 
+	lsp-prefer-flymake nil
 	lsp-enable-xref t
 	lsp-keep-workspace-alive nil))
 

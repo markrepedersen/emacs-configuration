@@ -11,7 +11,7 @@
   :config
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
-  (load-theme 'doom-outrun-electric t))
+  (load-theme 'doom-vibrant t))
 
 (use-package theme-looper
   :after hydra

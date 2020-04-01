@@ -1,18 +1,15 @@
 (use-package magit
   :defer t
   :after hydra
-  :hydra (hydra-magit (:color blue :columns 4)
-		      "Magit"
-		      ("c" magit-commit "commit")
-		      ("p" magit-push "push")
+  :hydra (hydra-magit (:hint nil :exit t)
+		      "Git"
+		      ("c" magit-commit "commit" :column "Local")
 		      ("s" magit-status "status")
-		      ("l" magit-log-all-branches "log")
-		      ("b" magit-branch-popup "branch popup")
-		      ("r" magit-rebase-popup "rebase popup")
-		      ("f" magit-fetch-popup "fetch popup")
-		      ("P" magit-push-popup "push popup")
-		      ("F" magit-pull-popup "pull popup")
-		      ("W" magit-format-patch "format patch")
-		      ("$" magit-process "process"))
-  :bind (("C-c g" . hydra-magit/body))
-  :commands magit-get-top-dir)
+		      ("l" magit-log "log")
+		      ("b" magit-branch "branch")
+		      ("r" magit-rebase "rebase")
+		      ("R" magit-reset "reset")
+		      ("P" magit-pull "pull" :column "Update")
+		      ("p" magit-push "push")
+		      ("f" magit-fetch "fetch popup"))
+  :bind (("C-c g" . hydra-magit/body)))
