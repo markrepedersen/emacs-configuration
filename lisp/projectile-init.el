@@ -1,5 +1,4 @@
 (use-package projectile
-  :diminish
   :after hydra
   :hydra (hydra-projectile (:hint nil :exit t)
 			   "Projectile"

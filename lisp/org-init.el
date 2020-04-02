@@ -15,7 +15,8 @@
 		    ("j" (lambda () (interactive) (org-clock-goto '(4))) "Go to clock")
 		    ("c" org-capture "Capture" :column "Capture")
 		    ("l" org-capture-goto-last-stored "Last capture")
-		    ("a" org-agenda "Agenda" :column "Agenda"))
+		    ("a" org-agenda "Agenda" :column "Agenda")
+		    ("s" org-insert-structure-template "Templates" :column "Structure"))
   :config
   (setq org-directory markrepedersen/org-dir
 	org-attach-id-dir markrepedersen/org-attachments-dir
