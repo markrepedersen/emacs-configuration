@@ -121,10 +121,6 @@
     (package-refresh-contents)
     (package-install 'use-package))
 
-  (eval-when-compile
-    (require 'use-package)
-    (use-package use-package-hydra))
-
   (eval-and-compile
     (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))
 	  use-package-always-ensure t
@@ -140,6 +136,7 @@
 	  enable-recursive-minibuffers t))
 
   (update-to-load-path my-load-file-dir)
-  (load-directory my-load-file-dir))
+  (require 'use-package))
 
 (init-settings)
+(load-directory my-load-file-dir)
