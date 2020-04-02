@@ -42,13 +42,23 @@ Follow the installation instructions here:
 Follow the installation instructions here: 
 https://github.com/fish-shell/fish-shell
 
-** ccls 
-*** MacOS
+** LSP
+This makes Emacs into a full-blown IDE. The following language servers must be installed for C/C++/Rust/Python to work. 
+All other languages will have their respective servers automatically installed.
+*** ccls 
+**** MacOS
 #+begin_src bash
 brew install ccls
 #+end_src
 
-*** Linux
+**** Linux
 See https://snapcraft.io/ccls
+
+*** lsp-python-ms
+Follow the installation instructions here: 
+https://github.com/emacs-lsp/lsp-python-ms
+
+*** rust-analyzer
+See https://rust-analyzer.github.io/manual.html#installation for installation instructions.
 
 
