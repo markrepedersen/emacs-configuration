@@ -30,6 +30,15 @@ sudo apt-get update
 sudo apt-get install emacs-snapshot
 #+end_src
 
+* Docker 
+To ensure reliable builds, it's nice to compile/run code on a standardized machine. Docker is good for this.
+
+To build the image: 
+
+#+begin_src bash
+DOCKER_BUILDKIT=1 docker build --progress=plain . 
+#+end_src
+
 * Dependencies
 The following dependencies will have to be installed on your system. 
 On MacOS, Emacs doesn't share your session's PATH variable. See `lisp/exec-path-from-shell-init.el` for how this is handled.
