@@ -26,6 +26,7 @@
 (use-package lsp-mode
   :after hydra
   :hook ((rust-mode . lsp)
+	 (sh-mode . lsp)
 	 (c-mode . lsp)
 	 (c++-mode . lsp)
 	 (java-mode . lsp)

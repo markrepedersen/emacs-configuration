@@ -4,8 +4,6 @@
     (exec-path-from-shell-initialize)))
 
 (use-package shell
-  :defer t
-  :ensure nil
   :hook ((shell-mode . my-shell-mode-hook)
          (comint-output-filter-functions . comint-strip-ctrl-m))
   :preface
@@ -35,7 +33,9 @@
     (ansi-color-for-comint-mode-on)
     (setq comint-input-sender 'my-shell-simple-send))
   :init
-  (setq system-uses-terminfo nil))
+  (setq system-uses-terminfo nil)
+  :config
+  (define-key sh-mode-map (kbd "C-c C-f") nil))
 
 ;; ANSI & XTERM 256 color support
 (use-package xterm-color
