@@ -1,0 +1,54 @@
+* Emacs Configuration
+This repository contains my personal emacs configuration that I use on a daily basis.
+
+* Installation
+** Clone
+Clone this repository to your $HOME folder.
+
+#+begin_src bash
+git clone https://github.com/markrepedersen/emacs-configuration.git ~/.emacs.d/~
+#+end_src
+
+** Install Emacs
+Obviously, Emacs must be installed using your package manager of choice.
+
+*** MacOS
+Emacs comes with MacOS out of the box, however, its version is quite old. I'd recommend either upgrading the built-in one or using Homebrew to install a new one.
+
+Here's what I use: 
+
+#+begin_src bash
+brew install emacs-head --HEAD --with-cocoa --with-mailutils --with-jansson --with-crash-debug --with-retro-icon-gnu-head
+ln -s /usr/local/opt/emacs-head/Emacs.app /Applications
+alias emacs="/usr/local/Cellar/emacs-head/HEAD-e6c6486_1/bin/emacs -nw"
+#+end_src
+
+*** Ubuntu
+#+begin_src bash
+sudo add-apt-repository ppa:ubuntu-elisp/ppa
+sudo apt-get update
+sudo apt-get install emacs-snapshot
+#+end_src
+
+* Dependencies
+The following dependencies will have to be installed on your system. 
+On MacOS, Emacs doesn't share your session's PATH variable. See `lisp/exec-path-from-shell-init.el` for how this is handled.
+
+** The Silver Searcher (ag)
+Follow the installation instructions here: 
+[[https://github.com/ggreer/the_silver_searcher]]
+
+** Fish shell
+Follow the installation instructions here: 
+https://github.com/fish-shell/fish-shell
+
+** ccls 
+*** MacOS
+#+begin_src bash
+brew install ccls
+#+end_src
+
+*** Linux
+See https://snapcraft.io/ccls
+
+
