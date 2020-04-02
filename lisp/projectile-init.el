@@ -1,7 +1,7 @@
 (use-package projectile
   :diminish
   :after hydra
-  :hydra (hydra-projectile (:hint nil :color red)
+  :hydra (hydra-projectile (:hint nil :exit t)
 			   "Projectile"
 			   ("a" helm-projectile "all" :column "Show all")
 			   ("f" helm-projectile-find-file "find file" :column "Navigation")
