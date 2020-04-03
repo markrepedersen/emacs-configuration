@@ -9,6 +9,7 @@
 		      ("b" magit-branch "branch")
 		      ("r" magit-rebase "rebase")
 		      ("R" magit-reset "reset")
+		      ("C" magit-clone "clone" :column "Server")
 		      ("P" magit-pull "pull" :column "Update")
 		      ("p" magit-push "push")
 		      ("f" magit-fetch "fetch popup"))

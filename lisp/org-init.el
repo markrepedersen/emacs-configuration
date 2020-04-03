@@ -42,7 +42,24 @@
 				 entry
 				 (file+headline markrepedersen/org-projects-file "Projects")
 				 "* TODO %?\n %^{Project}p\nDEADLINE: %^t\n"
-				 :empty-lines 1))))
+				 :empty-lines 1))
+	org-publish-project-alist '(("org-markrepedersen"
+				     :base-directory "~/work/markrepedersen.github.io/org/"
+				     :base-extension "org"
+				     :publishing-directory "~/work/markrepedersen.github.io/docs"
+				     :recursive t
+				     :publishing-function org-html-publish-to-html
+				     :headline-levels 4
+				     :html-extension "html"
+				     :body-only t
+				     :auto-preamble nil)
+				    ("org-static-markrepedersen"
+				     :base-directory "~/work/markrepedersen.github.io/org"
+				     :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php\\|mov\\|html\\|txt\\|"
+				     :publishing-directory "~/work/markrepedersen.github.io/docs"
+				     :recursive t
+				     :publishing-function org-publish-attachment)
+				    ("markrepedersen.github.io" :components ("org-markrepedersen" "org-static-markrepedersen")))))
 
 (use-package org-gcal
   :hook ((org-agenda-mode . org-gcal-sync)
