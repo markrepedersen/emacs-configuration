@@ -33,9 +33,7 @@
     (ansi-color-for-comint-mode-on)
     (setq comint-input-sender 'my-shell-simple-send))
   :init
-  (setq system-uses-terminfo nil)
-  :config
-  (define-key sh-mode-map (kbd "C-c C-f") nil))
+  (setq system-uses-terminfo nil))
 
 ;; ANSI & XTERM 256 color support
 (use-package xterm-color

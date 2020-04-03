@@ -1,6 +1,5 @@
 (use-package emms
-  :defer t
-  :after hydra
+  :after (hydra use-package-hydra)
   :hydra (hydra-emms (:color blue :columns 3)
 		     "Emacs Multimedia Player"
 		     ("x" (emms-play-directory-tree "~/Music") "Play All" :column "Play")

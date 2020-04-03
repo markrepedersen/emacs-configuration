@@ -119,7 +119,8 @@
 
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
-    (package-install 'use-package))
+    (package-install 'use-package)
+    (package-install 'use-package-hydra))
 
   (eval-and-compile
     (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))
@@ -136,7 +137,8 @@
 	  enable-recursive-minibuffers t))
 
   (update-to-load-path my-load-file-dir)
-  (require 'use-package))
+  (require 'use-package)
+  (require 'use-package-hydra))
 
 (init-settings)
 (load-directory my-load-file-dir)

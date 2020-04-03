@@ -1,6 +1,6 @@
 (use-package flycheck
   :requires helm-flycheck flycheck-pycheckers flycheck-inline
-  :after hydra
+  :after (hydra use-package-hydra)
   :hydra (flycheck-hydra (:pre  (flycheck-list-errors) :post (quit-windows-on "*Flycheck errors*") :hint nil)
 			 "Errors"
 			 ("f"  flycheck-error-list-set-filter                            "Filter")
