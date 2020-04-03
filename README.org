@@ -33,10 +33,17 @@ sudo apt-get install emacs-snapshot
 * Docker 
 To ensure reliable builds, it's nice to compile/run code on a standardized machine. Docker is good for this.
 
+- [ ] Publish image to Docker Hub.
+
 To build the image: 
 
 #+begin_src bash
-DOCKER_BUILDKIT=1 docker build --progress=plain . 
+DOCKER_BUILDKIT=1 docker build -t emacs:latest .
+#+end_src
+
+To run the image:
+#+begin_src bash
+docker run -it emacs:latest bash
 #+end_src
 
 * Dependencies
