@@ -6,7 +6,13 @@
 (use-package org
   :after hydra
   :bind (("C-c o" . hydra-org/body))
-  :hydra (hydra-org (:hint nil :color blue)
+  :hydra (hydra-org-table (:hint nil :color red :exit t)
+			  "Org table"
+			  ("t" org-table-create-or-convert-region "Create table" :exit t :column "Region")
+			  ("r" org-table-insert-row "Create row" :exit t :column "Update")
+			  ("c" org-table-insert-column "Create column" :exit t)
+			  ("r" org-table-insert-hline "Create header" :exit t))
+  :hydra (hydra-org (:hint nil :color blue :exit t)
 		    "Org mode"
 		    ("i" (lambda () (interactive) (org-clock-in '(4))) "Clock in" :column "Clock")
 		    ("o" org-clock-out "Clock out")
@@ -16,7 +22,8 @@
 		    ("c" org-capture "Capture" :column "Capture")
 		    ("l" org-capture-goto-last-stored "Last capture")
 		    ("a" org-agenda "Agenda" :column "Agenda")
-		    ("s" org-insert-structure-template "Templates" :column "Structure"))
+		    ("s" org-insert-structure-template "Templates" :column "Structure")
+		    ("t" hydra-org-table/body "table" :exit t))
   :config
   (setq org-directory markrepedersen/org-dir
 	org-attach-id-dir markrepedersen/org-attachments-dir
@@ -51,8 +58,7 @@
 				     :publishing-function org-html-publish-to-html
 				     :headline-levels 4
 				     :html-extension "html"
-				     :body-only t
-				     :auto-preamble nil)
+				     :body-only t)
 				    ("org-static-markrepedersen"
 				     :base-directory "~/work/markrepedersen.github.io/org"
 				     :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php\\|mov\\|html\\|txt\\|"

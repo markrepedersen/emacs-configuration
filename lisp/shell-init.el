@@ -81,10 +81,8 @@
            (executable-find "cmake")
            (executable-find "libtool")
            (executable-find "make"))
-  (use-package vterm :load-path "~/.emacs.d/emacs-libvterm/")
-  (use-package multi-libvterm
-    :load-path "~/.emacs.d/multi-libvterm/"
-    :bind (("C-c C-t" . multi-libvterm-next))))
+  (use-package vterm
+    :load-path "~/.emacs.d/emacs-libvterm/"))
 
 ;; Shell Pop
 (use-package shell-pop
@@ -92,8 +90,8 @@
   :bind ("C-t" . shell-pop)
   :init (setq shell-pop-window-size 40
 	      shell-pop-window-position "bottom"
-              shell-pop-shell-type
-              (cond ((fboundp 'vterm) '("vterm" "*vterm*" #'vterm))
-                    (*sys/win32* '("eshell" "*eshell*" #'eshell))
-                    (t '("terminal" "*terminal*"
+	      shell-pop-shell-type
+	      (cond ((fboundp 'vterm) '("vterm" "*vterm*" #'vterm))
+		    (*sys/win32* '("eshell" "*eshell*" #'eshell))
+		    (t '("terminal" "*terminal*"
                          (lambda () (term shell-pop-term-shell)))))))
