@@ -24,7 +24,6 @@
     :library-folders-fn nil)))
 
 (use-package lsp-mode
-  :after hydra
   :hook ((rust-mode . lsp)
 	 (sh-mode . lsp)
 	 (c-mode . lsp)
@@ -32,37 +31,27 @@
 	 (java-mode . lsp)
 	 (groovy-mode . lsp)
 	 (python-mode . lsp))
-  :bind (:map lsp-mode-map
-	      ("C-c l" . hydra-lsp/body)
-              ([remap xref-find-definitions] . lsp-find-definition)
-              ([remap xref-find-references] . lsp-find-references))
+  :mode-hydra
+  (lsp-mode
+   ("Find"
+    (("d" lsp-goto-implementation         "Goto implementation")
+     ("r" lsp-find-references             "Find references")
+     ("o" lsp-describe-thing-at-point     "Describe thing"))
+
+    "Peek"
+    (("D" lsp-ui-peek-find-implementation "Peek implementation")
+     ("R" lsp-ui-peek-find-references     "Peek references"))
+
+    "Fix/Refactor"
+    (("n" lsp-rename                     "Rename symbol")
+     ("f" lsp-format-region              "Format region")
+     ("x" lsp-execute-code-action        "Execute code action"))))
   :init
   (setq lsp-rust-server 'rust-analyzer
 	gc-cons-threshold 100000000
 	read-process-output-max (* 1024 1024)
 	company-minimum-prefix-length 1
 	company-idle-delay 0.2)
-  :hydra (hydra-lsp (:exit t :hint nil)
-		    "
- Buffer^^               Server^^                   Symbol
--------------------------------------------------------------------------------------
- [_f_] format           [_M-r_] restart            [_d_] declaration  [_i_] implementation  [_o_] documentation
- [_m_] imenu            [_S_]   shutdown           [_D_] definition   [_t_] type            [_r_] rename
- [_x_] execute action   [_M-s_] describe session   [_R_] references   [_s_] signature"
-		    ("d" lsp-find-declaration)
-		    ("D" lsp-ui-peek-find-definitions)
-		    ("R" lsp-ui-peek-find-references)
-		    ("i" lsp-ui-peek-find-implementation)
-		    ("t" lsp-find-type-definition)
-		    ("s" lsp-signature-help)
-		    ("o" lsp-describe-thing-at-point)
-		    ("r" lsp-rename)
-		    ("f" lsp-format-buffer)
-		    ("m" lsp-ui-imenu)
-		    ("x" lsp-execute-code-action)
-		    ("M-s" lsp-describe-session)
-		    ("M-r" lsp-restart-workspace)
-		    ("S" lsp-shutdown-workspace))
   :config
   (unbind-key "M-n" lsp-signature-mode-map)
   (unbind-key "M-p" lsp-signature-mode-map)
@@ -90,18 +79,18 @@
   :defer t
   :requires lsp-mode flycheck
   :init (setq lsp-ui-doc-enable t
-              lsp-ui-doc-use-webkit nil
-              lsp-ui-doc-delay 0.2
-              lsp-ui-doc-include-signature t
-              lsp-ui-doc-position 'at-point
-              lsp-ui-doc-border (face-foreground 'default)
-              lsp-eldoc-enable-hover nil ; Disable eldoc displays in minibuffer
-              lsp-ui-sideline-enable t
-              lsp-ui-sideline-show-hover nil
-              lsp-ui-sideline-show-diagnostics nil
-              lsp-ui-sideline-ignore-duplicate t
-              lsp-ui-imenu-enable t
-              lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
+	      lsp-ui-doc-use-webkit nil
+	      lsp-ui-doc-delay 0.2
+	      lsp-ui-doc-include-signature t
+	      lsp-ui-doc-position 'at-point
+	      lsp-ui-doc-border (face-foreground 'default)
+	      lsp-eldoc-enable-hover nil ; Disable eldoc displays in minibuffer
+	      lsp-ui-sideline-enable t
+	      lsp-ui-sideline-show-hover nil
+	      lsp-ui-sideline-show-diagnostics nil
+	      lsp-ui-sideline-ignore-duplicate t
+	      lsp-ui-imenu-enable t
+	      lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
                                     ,(face-foreground 'font-lock-string-face)
                                     ,(face-foreground 'font-lock-constant-face)
                                     ,(face-foreground 'font-lock-variable-name-face)))

@@ -1,11 +1,12 @@
 (use-package engine-mode
-  :after (hydra use-package-hydra)
-  :hydra (hydra-engine (:color blue)
-		       ("h" engine/search-github "github")
-		       ("g" engine/search-google        "google")
-		       ("s" engine/search-stack-overflow "stackoverflow")
-		       ("w" engine/search-wikipedia     "wikipedia")
-		       ("e" engine/search-emacswiki "emacs-wiki"))
+  :pretty-hydra
+  ((:color teal :quit-key "q")
+   ("Engine"
+    (("h" engine/search-github "github")
+     ("g" engine/search-google        "google")
+     ("s" engine/search-stack-overflow "stackoverflow")
+     ("w" engine/search-wikipedia     "wikipedia")
+     ("e" engine/search-emacswiki "emacs-wiki"))))
   :bind (("C-c e" . hydra-engine/body))
   :config
   (defengine github "https://github.com/search?ref=simplesearch&q=%s")

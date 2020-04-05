@@ -4,26 +4,15 @@
 (defvar markrepedersen/org-projects-file (concat markrepedersen/org-dir "/project.org"))
 
 (use-package org
-  :after hydra
-  :bind (("C-c o" . hydra-org/body))
-  :hydra (hydra-org-table (:hint nil :color red :exit t)
-			  "Org table"
-			  ("t" org-table-create-or-convert-region "Create table" :exit t :column "Region")
-			  ("r" org-table-insert-row "Create row" :exit t :column "Update")
-			  ("c" org-table-insert-column "Create column" :exit t)
-			  ("r" org-table-insert-hline "Create header" :exit t))
-  :hydra (hydra-org (:hint nil :color blue :exit t)
-		    "Org mode"
-		    ("i" (lambda () (interactive) (org-clock-in '(4))) "Clock in" :column "Clock")
-		    ("o" org-clock-out "Clock out")
-		    ("q" org-clock-cancel "Cancel clock")
-		    ("b" org-clock-in-last "Clock in last")
-		    ("j" (lambda () (interactive) (org-clock-goto '(4))) "Go to clock")
-		    ("c" org-capture "Capture" :column "Capture")
-		    ("l" org-capture-goto-last-stored "Last capture")
-		    ("a" org-agenda "Agenda" :column "Agenda")
-		    ("s" org-insert-structure-template "Templates" :column "Structure")
-		    ("t" hydra-org-table/body "table" :exit t))
+  :bind (("C-c o" . org-mode-hydra/body))
+  :preface
+  (defun create-blog-post(post-name)
+    "Create a new blog post with the given name under my website's repository."
+    (interactive "sPost's name: ")
+    (switch-to-buffer
+     (generate-new-buffer (expand-file-name
+			   (concat (format-time-string "%Y-%m-%d-") blog-name ".org")
+			   markrepedersen/website-dir))))
   :config
   (setq org-directory markrepedersen/org-dir
 	org-attach-id-dir markrepedersen/org-attachments-dir
@@ -91,3 +80,29 @@
 					 :deadline future)
 				  (:name "Waiting"
 					 :todo "WAIT"))))
+
+
+(pretty-hydra-define org-mode-functions
+  (:color amaranth :quit-key "q" :title (with-mode-icon 'org-mode "Org mode"))
+  ("Clock"
+   (("i" (lambda () (interactive) (org-clock-in '(4))) "Clock in")
+    ("o" org-clock-out "Clock out")
+    ("q" org-clock-cancel "Cancel clock")
+    ("b" org-clock-in-last "Clock in last")
+    ("j" (lambda () (interactive) (org-clock-goto '(4))) "Go to clock"))
+   "Website"
+   (("C-c" create-blog-post "Create blog post"))
+   "Capture"
+   (("c" org-capture "Capture")
+    ("l" org-capture-goto-last-stored "Last capture"))
+   "Agenda"
+   (("a" org-agenda "Agenda"))
+   "Structure"
+   (("s" org-insert-structure-template "Templates"))
+   "Table"
+   (("t" org-table-create-or-convert-from-region "Create table")
+    ("r" org-table-insert-row "Create row")
+    ("c" org-table-insert-column "Create column")
+    ("h" org-table-insert-hline "Create header"))))
+
+(global-set-key (kbd "C-c o") 'org-mode-functions/body)

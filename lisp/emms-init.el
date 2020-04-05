@@ -1,15 +1,16 @@
 (use-package emms
-  :after (hydra use-package-hydra)
-  :hydra (hydra-emms (:color blue :columns 3)
-		     "Emacs Multimedia Player"
-		     ("x" (emms-play-directory-tree "~/Music") "Play All" :column "Play")
-		     ("g" emms-playlist-mode-go "View All")
-		     ("n" emms-next "Next" :column "Move")
-		     ("p" emms-previous "Previous")
-		     ("P" emms-pause "Pause")
-		     ("+" emms-volume-mode-plus "Volume+" :column "Volume")
-		     ("-" emms-volume-mode-minus "Volume-"))
-  :bind ("C-c i" . hydra-emms/body)
+  :after hydra
+  :pretty-hydra
+  ((:color teal :quit-key "q")
+   ("Emacs Multimedia Player"
+    (("x" (emms-play-directory-tree "~/Music") "Play All" :column "Play")
+     ("g" emms-playlist-mode-go "View All")
+     ("n" emms-next "Next" :column "Move")
+     ("p" emms-previous "Previous")
+     ("P" emms-pause "Pause")
+     ("+" emms-volume-mode-plus "Volume+" :column "Volume")
+     ("-" emms-volume-mode-minus "Volume-"))))
+  :bind ("C-c i" . emms-hydra/body)
   :config
   (require 'emms-setup)
   (emms-all)

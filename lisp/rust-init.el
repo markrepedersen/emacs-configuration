@@ -10,28 +10,29 @@
 
 (use-package rust-mode
   :defer t
-  :after hydra
-  :hydra (hydra-rust (:exit t :hint nil)
-		     ("b" cargo-process-build "Build" :column "Cargo")
-		     ("r" cargo-process-run "Run")
-		     ("R" cargo-process-run-bin "Run (specific)")
-		     ("t" cargo-process-test "Test")
-		     ("c" cargo-process-clean "Clean")
+  :mode-hydra
+  ("Build"
+   (("b" cargo-process-build "Build" :column "Cargo")
+    ("r" cargo-process-run "Run")
+    ("R" cargo-process-run-bin "Run (specific)")
+    ("t" cargo-process-test "Test")
+    ("c" cargo-process-clean "Clean"))
 
-		     ("d" cargo-process-doc "Doc" :column "")
-		     ("D" cargo-process-doc-open "Doc (open)")
-		     ("u" cargo-process-update "Update")
-		     ("C" cargo-process-check "Check")
-		     ("a" cargo-process-audit "Audit")
-		     ("C-c" cargo-process-clippy "Clippy")
+   "Docs"
+   (("d" cargo-process-doc "Doc" :column "")
+    ("D" cargo-process-doc-open "Doc (open)")
+    ("u" cargo-process-update "Update")
+    ("C" cargo-process-check "Check")
+    ("a" cargo-process-audit "Audit")
+    ("C-c" cargo-process-clippy "Clippy"))
 
-		     ("n" next-error "Next" :column "Errors")
-		     ("N" next-error-skip-warnings "Next, skip warnings")
-		     ("p" previous-error "Previous")
-		     ("f" first-error "First")
-		     ("k" kill-compilation "Stop")
-		     ("q" nil "Cancel" :color blue))
-  :bind (:map rust-mode-map ("C-c r" . hydra-rust/body))
+   "Errors"
+   (("n" next-error "Next" :column "Errors")
+    ("N" next-error-skip-warnings "Next, skip warnings")
+    ("p" previous-error "Previous")
+    ("f" first-error "First")
+    ("k" kill-compilation "Stop")
+    ("q" nil "Cancel" :color blue)))
   :config
   (setq-default xref-prompt-for-identifier nil))
 
