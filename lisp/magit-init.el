@@ -7,17 +7,23 @@
 	 "Git"
        (s-concat "Git repo: " p)))))
 
-
 (use-package magit
   :after hydra
   :pretty-hydra
-  ((:color teal :quit-key "q" :title (markrepedersen/current-git-repo))
+  ((:color teal :title (markrepedersen/current-git-repo))
    ("Commit"
     (("c" magit-commit "commit")
-     ("s" magit-status "status")
-     ("l" magit-log "log")
-     ("r" magit-rebase "rebase")
-     ("R" magit-reset "reset"))
+     ("r" magit-rebase "rebase"))
+    "Status"
+    (("s" magit-status "status")
+     ("l" magit-log "log"))
+    "Clean"
+    (("C-c" (lambda () (magit-clean "-dffx")) "(-dffx)")
+     ("C-d" (lambda () (magit-clean "-dffxn")) "(-dffxn)")
+     ("C-r" magit-reset "reset"))
+    "Checkout"
+    (("C-b" magit-checkout "branch")
+     ("C-f" magit-file-checkout "file"))
     "Branches"
     (("b" magit-branch "branch")
      ("d" magit-branch-delete "delete"))
@@ -25,5 +31,5 @@
     (("C" magit-clone "clone")
      ("P" magit-pull "pull")
      ("p" magit-push "push")
-     ("f" magit-fetch "fetch popup"))))
+     ("f" magit-fetch "fetch"))))
   :bind (("C-c g" . magit-hydra/body)))

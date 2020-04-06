@@ -25,3 +25,13 @@ transient/
 /.lsp*
 /.dap*
 /.mc*
+/multi-libvterm/
+/.org-id-locations
+/auto/
+/bookmarks
+/custom.el
+/emacs-libvterm/
+/emms/
+/groovy-language-server/
+/org-gcal/
+/rust-analyzer/

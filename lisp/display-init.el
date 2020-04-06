@@ -8,23 +8,58 @@
   :config
   (require 'smartparens-config))
 
-(defvar toggles-title (with-faicon "toggle-on" "Toggles" 1 -0.05))
+(use-package all-the-icons
+  :if window-system
+  :config
+  (when (not (member "all-the-icons" (font-family-list)))
+    (all-the-icons-install-fonts t)))
+
+(use-package doom-modeline :init (doom-modeline-mode 1))
+
+(use-package doom-themes
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (load-theme 'doom-vibrant t))
+
+(use-package theme-looper
+  :bind (:map global-map ("C-c C-c t" . theme-looper-hydra/body))
+  :pretty-hydra
+  ("Update"
+   (("n" theme-looper-enable-next-theme "next")
+    ("p" theme-looper-enable-previous-theme "previous")))
+  :config
+  (theme-looper-set-favorite-themes '(doom-one
+				      doom-acario-dark
+				      doom-city-lights
+				      doom-challenger-deep
+				      doom-manegarm
+				      doom-outrun-electric
+				      doom-spacegrey
+				      doom-tomorrow-day)))
+
+(defun markrepedersen/get-theme-name
+    "Get the name of the currently displayed theme."
+  )
 
 (pretty-hydra-define toggle-functions
-  (:color amaranth :quit-key "q" :title toggles-title)
+  (:title (with-faicon "toggle-on" "Toggles" 1 -0.05))
   ("Basic"
    (("n" linum-mode "line number" :toggle t)
     ("w" whitespace-mode "whitespace" :toggle t)
     ("W" whitespace-cleanup-mode "whitespace cleanup" :toggle t)
     ("r" rainbow-mode "rainbow" :toggle t)
     ("L" page-break-lines-mode "page break lines" :toggle t))
+   "Theme"
+   (("t" theme-looper-enable-next-theme "next")
+    ("T" theme-looper-enable-previous-theme "previous"))
    "Highlight"
    (("s" symbol-overlay-mode "symbol" :toggle t)
     ("l" hl-line-mode "line" :toggle t)
     ("x" highlight-sexp-mode "sexp" :toggle t)
     ("t" hl-todo-mode "todo" :toggle t))
    "UI"
-   (("d" jp-themes-toggle-light-dark "dark theme" :toggle jp-current-theme-dark-p))
+   (("d" jp- "dark theme" :toggle jp-current-theme-dark-p))
    "Coding"
    (("p" smartparens-mode "smartparens" :toggle t)
     ("P" smartparens-strict-mode "smartparens strict" :toggle t)
