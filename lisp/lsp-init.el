@@ -32,7 +32,7 @@
 	 (groovy-mode . lsp)
 	 (python-mode . lsp))
   :mode-hydra
-  (lsp-mode
+  ((:color teal :quit-key "q" :title (with-mode-icon 'lsp-mode "LSP mode"))
    ("Find"
     (("d" lsp-goto-implementation         "Goto implementation")
      ("r" lsp-find-references             "Find references")
