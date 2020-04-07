@@ -178,4 +178,3 @@
 (init-settings)
 (load-hydras)
 (load-directory my-load-file-dir)
-(put 'magit-clean 'disabled nil)

@@ -38,10 +38,6 @@
 				      doom-spacegrey
 				      doom-tomorrow-day)))
 
-(defun markrepedersen/get-theme-name
-    "Get the name of the currently displayed theme."
-  )
-
 (pretty-hydra-define toggle-functions
   (:title (with-faicon "toggle-on" "Toggles" 1 -0.05))
   ("Basic"
@@ -50,16 +46,16 @@
     ("W" whitespace-cleanup-mode "whitespace cleanup" :toggle t)
     ("r" rainbow-mode "rainbow" :toggle t)
     ("L" page-break-lines-mode "page break lines" :toggle t))
-   "Theme"
-   (("t" theme-looper-enable-next-theme "next")
-    ("T" theme-looper-enable-previous-theme "previous"))
    "Highlight"
    (("s" symbol-overlay-mode "symbol" :toggle t)
+    ("t" fic-mode "todos" :toggle t)
+    ("h" highlight-indent-guides-mode "indentation" :toggle t)
     ("l" hl-line-mode "line" :toggle t)
     ("x" highlight-sexp-mode "sexp" :toggle t)
     ("t" hl-todo-mode "todo" :toggle t))
    "UI"
-   (("d" jp- "dark theme" :toggle jp-current-theme-dark-p))
+   (("C-n" theme-looper-enable-next-theme "next")
+    ("C-p" theme-looper-enable-previous-theme "previous"))
    "Coding"
    (("p" smartparens-mode "smartparens" :toggle t)
     ("P" smartparens-strict-mode "smartparens strict" :toggle t)

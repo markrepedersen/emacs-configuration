@@ -32,4 +32,6 @@
      ("P" magit-pull "pull")
      ("p" magit-push "push")
      ("f" magit-fetch "fetch"))))
-  :bind (("C-c g" . magit-hydra/body)))
+  :bind (("C-c g" . magit-hydra/body))
+  :config
+  (put 'magit-clean 'disabled nil))
