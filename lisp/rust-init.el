@@ -1,41 +1,35 @@
-(use-package cargo
-  :defer t
-  :config
-  (setq cargo-process--enable-rust-backtrace t)
-  :hook (rust-mode . cargo-minor-mode))
-
 (use-package flycheck-rust
-  :defer t
-  :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  :defer t)
 
-(use-package rust-mode
-  :defer t
+(use-package cargo
+  :defer t)
+
+(use-package rustic
+  :demand
+  :hook ((cargo-minor-mode)
+	 (flycheck-rust-setup))
   :mode-hydra
-  (rust-mode
-   (:color pink :title "Rust mode")
+  (rustic-mode
+   (:title (with-mode-icon 'rust-mode "Rust"))
    ("Build"
-    (("b" cargo-process-build "Build" :exit)
-     ("r" cargo-process-run "Run" :exit)
-     ("R" cargo-process-run-bin "Run (specific)")
-     ("t" cargo-process-test "Test")
-     ("c" cargo-process-clean "Clean"))
+    (("b" rustic-cargo-build "Build" :exit)
+     ("r" rustic-cargo-run "Run" :exit)
+     ("t" rustic-cargo-test "Test")
+     ("T" rustic-cargo-current-test "Test (current)")
+     ("B" (lambda () (setq rustic-compile-backtrace t) "Backtrace")))
 
-    "Docs"
-    (("d" cargo-process-doc "Doc")
-     ("D" cargo-process-doc-open "Doc (open)")
-     ("u" cargo-process-update "Update")
-     ("C" cargo-process-check "Check")
-     ("a" cargo-process-audit "Audit")
-     ("C-c" cargo-process-clippy "Clippy"))
+    "Init"
+    (("C" rustic-cargo-new "New")
+     ("I" cargo-process-init "New"))
 
     "Errors"
     (("n" next-error "Next" :exit nil)
-     ("N" next-error-skip-warnings "Next, skip warnings" :exit nil)
      ("p" previous-error "Previous" :exit nil)
      ("f" first-error "First")
      ("k" kill-compilation "Stop"))))
   :config
-  (setq-default xref-prompt-for-identifier nil))
+  (setq-default xref-prompt-for-identifier nil)
+  (setq rustic-lsp-server 'rust-analyzer))
 
 ;; Show xref results in helm.
 (use-package helm-xref

@@ -76,8 +76,8 @@
   (:color teal :title "Window Manager")
   ("Actions"
    (("TAB" other-window "switch")
-    ("x" ace-delete-window "delete window")
-    ("m" ace-delete-other-windows "maximize")
+    ("x" ace-delete-window "pop current")
+    ("m" ace-delete-other-windows "keep only current")
     ("s" ace-swap-window "swap")
     ("a" ace-select-window "select")
     ("r" rename-current-buffer-file "rename file")
@@ -89,7 +89,8 @@
     ("<up>" move-border-up "↑" :exit nil)
     ("<right>" move-border-right "→" :exit nil)
     ("n" balance-windows "balance")
-    ("f" toggle-frame-fullscreen "toggle fullscreen"))
+    ("F" toggle-frame-fullscreen "toggle fullscreen")
+    ("M" toggle-frame-maximized "toggle maximized"))
 
    "Split"
    (("b" split-window-right "horizontally")

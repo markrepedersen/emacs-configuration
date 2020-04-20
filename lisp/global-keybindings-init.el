@@ -18,6 +18,13 @@
         (forward-line 1)
         (forward-char pos)))))
 
+(defun align-repeat ()
+  (interactive)
+  (align-regexp (point-min)
+		(point-max)
+		(concat "\\(\\s-*\\)" "[[:space:]]+") 1 1 t))
+
+(global-set-key (kbd "C-c C-c i") 'align-repeat)
 (global-set-key (kbd "C-d") 'duplicate-line-or-region)
 (global-set-key (kbd "C-k") 'kill-whole-line)
 (global-set-key (kbd "C-+") 'text-scale-increase)

@@ -12,26 +12,32 @@
   :pretty-hydra
   ((:color teal :title (markrepedersen/current-git-repo))
    ("Commit"
-    (("c" magit-commit "commit")
-     ("r" magit-rebase "rebase"))
+    (("cc" magit-commit "commit")
+     ("cr" magit-rebase "rebase"))
+    "Stash"
+    (("ss" magit-stash "options"))
+    "Diff"
+    (("dd" magit-diff "options"))
     "Status"
-    (("s" magit-status "status")
-     ("l" magit-log "log"))
+    (("ss" magit-status "status"))
+    "Log"
+    (("ls" magit-log-head "head")
+     ("lm" magit-log-merged "merged"))
     "Clean"
-    (("C-c" (lambda () (magit-clean "-dffx")) "(-dffx)")
-     ("C-d" (lambda () (magit-clean "-dffxn")) "(-dffxn)")
-     ("C-r" magit-reset "reset"))
+    (("Cc" (lambda () (interactive) (magit-clean "-dffx")) "(-dffx)")
+     ("Cn" (lambda () (interactive) (magit-clean "-dffxn")) "(-dffxn)")
+     ("Cr" magit-reset "reset"))
     "Checkout"
-    (("C-b" magit-checkout "branch")
-     ("C-f" magit-file-checkout "file"))
+    (("Cb" magit-checkout "branch")
+     ("Cf" magit-file-checkout "file"))
     "Branches"
-    (("b" magit-branch "branch")
-     ("d" magit-branch-delete "delete"))
+    (("bx" magit-branch "branch")
+     ("bd" magit-branch-delete "delete"))
     "Update"
-    (("C" magit-clone "clone")
-     ("P" magit-pull "pull")
-     ("p" magit-push "push")
-     ("f" magit-fetch "fetch"))))
+    (("uc" magit-clone "clone")
+     ("up" magit-pull "pull")
+     ("up" magit-push "push")
+     ("uf" magit-fetch "fetch"))))
   :bind (("C-c g" . magit-hydra/body))
   :config
   (put 'magit-clean 'disabled nil))

@@ -7,7 +7,7 @@
      ("s" engine/search-stack-overflow "stackoverflow")
      ("w" engine/search-wikipedia     "wikipedia")
      ("e" engine/search-emacswiki "emacs-wiki"))))
-  :bind (("C-c e" . hydra-engine/body))
+  :bind (("C-c e" . engine-mode-hydra/body))
   :config
   (defengine github "https://github.com/search?ref=simplesearch&q=%s")
   (defengine google "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s")

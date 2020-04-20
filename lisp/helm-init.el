@@ -22,28 +22,30 @@
         helm-quick-update t) ;; don't show invisible candidates
   (helm-autoresize-mode t))
 
-
 (use-package helm-ag
+  :preface
+  (defun helm-do-ag-project-root-with-flag (flag)
+    (let ((helm-ag-command-option (concat helm-ag-command-option " " flag)))
+      (helm-do-ag-project-root)))
   :bind (("C-c h" . helm-ag-hydra/body))
   :pretty-hydra
-  ((:color amaranth :quit-key "q")
-   ("Search"
-    (("d" helm-ag "Search current directory")
-     ("p" helm-ag-project-root "Search project root")
-     ("f" helm-ag-this-file "Search current buffer"))
-    "Navigation"
-    (("m" helm-ag-clear-stack "Clear AG markers")
-     ("." helm-ag-pop-stack "Go back")))))
+  ("Search"
+   (("d" helm-do-ag "current directory" :exit t)
+    ("p" helm-do-ag-project-root "project root" :exit t)
+    ("f" helm-do-ag-this-file "this file" :exit t)
+    ("l" (lambda () (interactive) (helm-do-ag-project-root-with-flag "-l")) "for files" :exit t))
+   "Navigation"
+   (("m" helm-ag-clear-stack "clear stack" :exit t)
+    ("." helm-ag-pop-stack "back" :exit t))))
 
 (use-package helm-swoop
   :bind
-  (("C-s" . helm-swoop-without-pre-input)
-   ("C-S-s" . helm-swoop))
-  :config (setq
-	   helm-swoop-split-direction 'split-window-horizontally
-	   helm-swoop-split-with-multiple-windows t
-	   helm-swoop-pre-input-function
-	   (lambda ()
-	     (if mark-active
-		 (buffer-substring-no-properties (mark) (point))
-	       ""))))
+  ("C-s" . helm-swoop)
+  :config
+  (setq
+   helm-swoop-split-direction 'split-window-horizontally
+   helm-swoop-split-with-multiple-windows t
+   helm-swoop-pre-input-function (lambda ()
+				   (if mark-active
+				       (buffer-substring-no-properties (mark) (point))
+				     ""))))

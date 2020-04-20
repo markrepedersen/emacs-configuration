@@ -65,7 +65,7 @@
   "Loads hydra related packages."
   (use-package hydra
     :demand)
-  
+
   (require 'all-the-icons)
 
   (defun with-faicon (icon str &optional height v-adjust)
@@ -90,7 +90,7 @@
 			 (apply #'all-the-icons-octicon "file-text" args)
                        icon)))
       (s-concat icon (if nospace "" " ") str)))
-  
+
   (use-package major-mode-hydra
     :demand
     :bind
@@ -113,18 +113,25 @@
   (let ((load-it (lambda (f) (load-file (concat (file-name-as-directory dir) f)))))
     (mapc load-it (directory-files dir nil "\\.el$"))))
 
+(defun init-startup-optimizations ()
+  (setq gc-cons-threshold-original gc-cons-threshold
+	gc-cons-threshold (* 1024 1024 100)
+	file-name-handler-alist-original file-name-handler-alist
+	file-name-handler-alist nil)
+  (run-with-idle-timer
+   5 nil
+   (lambda ()
+     (setq gc-cons-threshold gc-cons-threshold-original)
+     (setq file-name-handler-alist file-name-handler-alist-original)
+     (makunbound 'gc-cons-threshold-original)
+     (makunbound 'file-name-handler-alist-original)
+     (message "gc-cons-threshold and file-name-handler-alist restored"))))
+
 (defun init-settings ()
   "Initialize good-to-have settings for all modes."
   (progn
-    (add-hook 'after-init-hook
-              `(lambda ()
-		 (setq gc-cons-threshold 800000
-                       gc-cons-percentage 0.1)
-		 (garbage-collect)) t)
     (setq package-enable-at-startup nil
 	  message-log-max 16384
-	  gc-cons-threshold 402653184
-	  gc-cons-percentage 0.6
 	  auto-window-vscroll nil
 	  site-run-file nil
 	  frame-title-format '("markrepedersen - %b")
@@ -146,10 +153,7 @@
     (column-number-mode 1)
     (blink-cursor-mode 0)
     (display-time-mode 1)
-    (display-battery-mode 1)
-    (toggle-frame-maximized)
-    (toggle-frame-fullscreen)
-    (add-hook 'prog-mode-hook 'linum-mode))
+    (display-battery-mode 1))
   (unless (bound-and-true-p package--initialized)
     (setq package-enable-at-startup nil)
     (package-initialize))

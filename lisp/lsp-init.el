@@ -24,14 +24,15 @@
     :library-folders-fn nil)))
 
 (use-package lsp-mode
-  :hook ((rust-mode . lsp)
+  :hook ((rustic-mode . lsp)
 	 (sh-mode . lsp)
 	 (c-mode . lsp)
 	 (c++-mode . lsp)
 	 (java-mode . lsp)
 	 (groovy-mode . lsp)
-	 (python-mode . lsp))
-  :mode-hydra
+	 (python-mode . lsp)
+	 (linum-mode))
+  :pretty-hydra
   ((:color teal :quit-key "q" :title (with-mode-icon 'lsp-mode "LSP mode"))
    ("Find"
     (("d" lsp-goto-implementation         "Goto implementation")
@@ -46,23 +47,31 @@
     (("n" lsp-rename                     "Rename symbol")
      ("f" lsp-format-region              "Format region")
      ("x" lsp-execute-code-action        "Execute code action"))))
+  :bind ("C-c l" . lsp-mode-hydra/body)
   :init
   (setq lsp-rust-server 'rust-analyzer
-	gc-cons-threshold 100000000
-	read-process-output-max (* 1024 1024)
-	company-minimum-prefix-length 1
-	company-idle-delay 0.2)
+	read-process-output-max (* 1024 1024 10))
   :config
   (unbind-key "M-n" lsp-signature-mode-map)
   (unbind-key "M-p" lsp-signature-mode-map)
+  (push "[/\\\\][^/\\\\]*\\.\\(json\\|html\\|jade\\)$" lsp-file-watch-ignored)
+  (push "[/\\\\]build$" lsp-file-watch-ignored)
   (setq lsp-idle-delay 0.1000
-	lsp-prefer-capf t
 	lsp-prefer-flymake nil
+	lsp-log-io nil
 	lsp-enable-xref t
 	lsp-keep-workspace-alive nil))
 
+(use-package company-lsp
+  :ensure t
+  :config
+  (push 'company-lsp company-backends)
+  (setq company-transformers nil
+        company-lsp-async t
+        company-lsp-cache-candidates nil))
+
 (use-package helm-lsp
-  :defer t
+  :after lsp-mode
   :config
   (defun netrom/helm-lsp-workspace-symbol-at-point ()
     (interactive)
@@ -76,20 +85,21 @@
 
 
 (use-package lsp-ui
-  :defer t
-  :requires lsp-mode flycheck
+  :after lsp-mode
+  :hook (lsp-mode . lsp-ui-mode)
   :init (setq lsp-ui-doc-enable t
 	      lsp-ui-doc-use-webkit nil
-	      lsp-ui-doc-delay 0.2
+	      lsp-ui-doc-delay 0.1
 	      lsp-ui-doc-include-signature t
-	      lsp-ui-doc-position 'at-point
+	      lsp-ui-doc-position 'top
 	      lsp-ui-doc-border (face-foreground 'default)
-	      lsp-eldoc-enable-hover nil ; Disable eldoc displays in minibuffer
-	      lsp-ui-sideline-enable t
-	      lsp-ui-sideline-show-hover nil
-	      lsp-ui-sideline-show-diagnostics nil
+	      lsp-eldoc-enable-hover t
+	      lsp-ui-sideline-enable nil
+	      lsp-ui-sideline-show-hover t
+	      lsp-ui-sideline-show-diagnostics t
 	      lsp-ui-sideline-ignore-duplicate t
 	      lsp-ui-imenu-enable t
+	      lsp-ui-doc-border   "orange"
 	      lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
                                     ,(face-foreground 'font-lock-string-face)
                                     ,(face-foreground 'font-lock-constant-face)
@@ -99,20 +109,3 @@
   (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
   (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
   (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
-
-(use-package dap-mode
-  :defer t
-  :bind (:map lsp-mode-map ("C-c C-d" . dap-hydra))
-  :hook ((after-init . dap-mode)
-         (dap-mode . dap-ui-mode)
-         (dap-session-created . (lambda (_args) (dap-hydra)))
-         (dap-stopped . (lambda (_args) (dap-hydra)))
-
-         (python-mode . (lambda () (require 'dap-python)))
-         (ruby-mode . (lambda () (require 'dap-ruby)))
-         (go-mode . (lambda () (require 'dap-go)))
-         (java-mode . (lambda () (require 'dap-java)))
-         ((c-mode c++-mode objc-mode swift-mode) . (lambda () (require 'dap-lldb)))
-         (php-mode . (lambda () (require 'dap-php)))
-         (elixir-mode . (lambda () (require 'dap-elixir)))
-         ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))

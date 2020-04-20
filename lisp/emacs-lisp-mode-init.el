@@ -15,6 +15,4 @@
    (("d" describe-foo-at-point "thing-at-pt")
     ("f" counsel-describe-function "function")
     ("v" counsel-describe-variable "variable")
-    ("i" info-lookup-symbol "info lookup"))
-   "Quit"
-   (("q" nil "quit hydra"))))
+    ("i" info-lookup-symbol "info lookup"))))
