@@ -31,3 +31,4 @@
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-0") 'text-scale-adjust)
 (global-set-key (kbd "C-.") 'pop-to-mark-command)
+(global-set-key (kbd "M-;") 'comment-line)

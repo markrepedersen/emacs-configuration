@@ -1,8 +1,10 @@
 (use-package modern-cpp-font-lock
+  :defer t
   :diminish t
   :init (modern-c++-font-lock-global-mode t))
 
 (use-package ccls
+  :defer t
   :hook ((c-mode c++-mode objc-mode) .
          (lambda () (require 'ccls) (lsp)))
   :config
@@ -24,7 +26,9 @@
     :library-folders-fn nil)))
 
 (use-package lsp-mode
+  :defer t
   :hook ((rustic-mode . lsp)
+	 (rust-mode . lsp)
 	 (sh-mode . lsp)
 	 (c-mode . lsp)
 	 (c++-mode . lsp)
@@ -47,7 +51,7 @@
     (("n" lsp-rename                     "Rename symbol")
      ("f" lsp-format-region              "Format region")
      ("x" lsp-execute-code-action        "Execute code action"))))
-  :bind ("C-c l" . lsp-mode-hydra/body)
+  :bind (("C-c l" . lsp-mode-hydra/body))
   :init
   (setq lsp-rust-server 'rust-analyzer
 	read-process-output-max (* 1024 1024 10))
@@ -63,7 +67,7 @@
 	lsp-keep-workspace-alive nil))
 
 (use-package company-lsp
-  :ensure t
+  :defer t
   :config
   (push 'company-lsp company-backends)
   (setq company-transformers nil
@@ -71,20 +75,20 @@
         company-lsp-cache-candidates nil))
 
 (use-package helm-lsp
+  :defer t
   :after lsp-mode
   :config
   (defun netrom/helm-lsp-workspace-symbol-at-point ()
     (interactive)
     (let ((current-prefix-arg t))
       (call-interactively #'helm-lsp-workspace-symbol)))
-
   (defun netrom/helm-lsp-global-workspace-symbol-at-point ()
     (interactive)
     (let ((current-prefix-arg t))
       (call-interactively #'helm-lsp-global-workspace-symbol))))
 
-
 (use-package lsp-ui
+  :defer t
   :after lsp-mode
   :hook (lsp-mode . lsp-ui-mode)
   :init (setq lsp-ui-doc-enable t

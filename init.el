@@ -154,6 +154,9 @@
     (blink-cursor-mode 0)
     (display-time-mode 1)
     (display-battery-mode 1))
+
+  (add-hook 'prog-mode-hook 'linum-mode)
+
   (unless (bound-and-true-p package--initialized)
     (setq package-enable-at-startup nil)
     (package-initialize))

@@ -2,7 +2,8 @@
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)
 	 ("C-x b" . helm-mini)
-	 ("C-x C-b" . helm-buffers-list))
+	 ("C-x C-b" . helm-buffers-list)
+	 ("C-c f" . helm-imenu))
   :config
   (setq helm-candidate-number-limit 100
 	completion-styles '(flex)
@@ -40,12 +41,10 @@
 
 (use-package helm-swoop
   :bind
-  ("C-s" . helm-swoop)
+  (("C-s" . helm-swoop)
+   ("M-g" . helm-swoop-back-to-last-point))
   :config
   (setq
-   helm-swoop-split-direction 'split-window-horizontally
-   helm-swoop-split-with-multiple-windows t
-   helm-swoop-pre-input-function (lambda ()
-				   (if mark-active
-				       (buffer-substring-no-properties (mark) (point))
-				     ""))))
+   helm-swoop-split-direction 'split-window-vertically
+   helm-swoop-use-line-number-face t
+   helm-swoop-split-with-multiple-windows t))

@@ -1,4 +1,11 @@
 (use-package smartparens
+  :preface
+  (defun my-create-newline-and-enter-sexp (&rest _ignored)
+    "Open a new brace or bracket expression, with relevant newlines and indent. "
+    (newline)
+    (indent-according-to-mode)
+    (forward-line -1)
+    (indent-according-to-mode))
   :hook ((after-init . smartparens-global-mode)
 	 (after-init . show-smartparens-global-mode))
   :bind (("C-S-a" . sp-beginning-of-sexp)
@@ -6,7 +13,8 @@
 	 ("C-(" . sp-backward-sexp)
 	 ("C-)" . sp-forward-sexp))
   :config
-  (require 'smartparens-config))
+  (require 'smartparens-config)
+  (sp-pair "{" nil :post-handlers '(("||\n[i]" "RET"))))
 
 (use-package all-the-icons
   :if window-system

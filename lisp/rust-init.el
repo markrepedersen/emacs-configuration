@@ -1,11 +1,4 @@
-(use-package flycheck-rust
-  :defer t)
-
-(use-package cargo
-  :defer t)
-
 (use-package rustic
-  :demand
   :hook ((cargo-minor-mode)
 	 (flycheck-rust-setup))
   :mode-hydra
@@ -30,6 +23,14 @@
   :config
   (setq-default xref-prompt-for-identifier nil)
   (setq rustic-lsp-server 'rust-analyzer))
+
+(use-package flycheck-rust
+  :after rustic
+  :defer t)
+
+(use-package cargo
+  :after rustic
+  :defer t)
 
 ;; Show xref results in helm.
 (use-package helm-xref
