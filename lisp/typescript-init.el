@@ -1,4 +1,5 @@
 (use-package typescript-mode
-  :defer t
-  :mode (("\\.ts\\'" . typescript-mode)
-         ("\\.tsx\\'" . typescript-mode)))
+  :mode "\\.ts\\'"
+  :custom
+  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr"))
+  :commands (typescript-mode))

@@ -1,8 +1,7 @@
-(use-package rustic
-  :hook ((cargo-minor-mode)
-	 (flycheck-rust-setup))
+(use-package rust-mode
+  :hook ((cargo-minor-mode))
   :mode-hydra
-  (rustic-mode
+  (rust-mode
    (:title (with-mode-icon 'rust-mode "Rust"))
    ("Build"
     (("b" rustic-cargo-build "Build" :exit)
@@ -21,12 +20,13 @@
      ("f" first-error "First")
      ("k" kill-compilation "Stop"))))
   :config
+  (setq rust-format-on-save t)
   (setq-default xref-prompt-for-identifier nil)
-  (setq rustic-lsp-server 'rust-analyzer))
+  (add-hook 'rust-mode-hook
+            (lambda () (setq indent-tabs-mode nil))))
 
 (use-package flycheck-rust
-  :after rustic
-  :defer t)
+  :hook ((flycheck-mode . flycheck-rust-setup)))
 
 (use-package cargo
   :after rustic

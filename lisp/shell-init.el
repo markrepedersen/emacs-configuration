@@ -33,7 +33,8 @@
     (ansi-color-for-comint-mode-on)
     (setq comint-input-sender 'my-shell-simple-send))
   :init
-  (setq system-uses-terminfo nil))
+  (setq system-uses-terminfo nil
+	term-buffer-maximum-size 0))
 
 ;; ANSI & XTERM 256 color support
 (use-package xterm-color

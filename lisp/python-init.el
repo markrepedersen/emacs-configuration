@@ -1,11 +1,5 @@
-(use-package elpy
-  :defer t
-  :config
-  (elpy-enable))
-
 (use-package lsp-python-ms
-  :defer t
-  :hook (python-mode . lsp)
-  :config
-  (setq lsp-python-ms-executable
-	"~/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer"))
+  :init (setq lsp-python-ms-auto-install-server t)
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-python-ms)
+                         (lsp))))

@@ -1,5 +1,6 @@
 (use-package projectile
   :config
+  (add-to-list 'projectile-globally-ignored-directories "*node_modules")
   (setq projectile-enable-caching t
 	projectile-sort-order 'recently-active
 	projectile-file-exists-remote-cache-expire nil)

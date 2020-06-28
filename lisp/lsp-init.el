@@ -1,15 +1,13 @@
 (use-package modern-cpp-font-lock
-  :defer t
-  :diminish t
   :init (modern-c++-font-lock-global-mode t))
 
 (use-package ccls
-  :defer t
   :hook ((c-mode c++-mode objc-mode) .
          (lambda () (require 'ccls) (lsp)))
   :config
   (setq ccls-executable (executable-find "ccls")
 	ccls-sem-highlight-method 'font-lock
+	flycheck-clang-include-path (list (expand-file-name "/usr/include/c++/"))
 	ccls-enable-skipped-ranges nil)
   (lsp-register-client
    (make-lsp-client
@@ -26,13 +24,12 @@
     :library-folders-fn nil)))
 
 (use-package lsp-mode
-  :defer t
-  :hook ((rustic-mode . lsp)
-	 (rust-mode . lsp)
+  :hook ((rust-mode . lsp)
 	 (sh-mode . lsp)
 	 (c-mode . lsp)
 	 (c++-mode . lsp)
 	 (java-mode . lsp)
+	 (typescript-mode . lsp)
 	 (groovy-mode . lsp)
 	 (python-mode . lsp)
 	 (linum-mode))
@@ -53,8 +50,8 @@
      ("x" lsp-execute-code-action        "Execute code action"))))
   :bind (("C-c l" . lsp-mode-hydra/body))
   :init
-  (setq lsp-rust-server 'rust-analyzer
-	read-process-output-max (* 1024 1024 10))
+  (setq read-process-output-max (* 1024 1024 10)
+	lsp-rust-server 'rust-analyzer)
   :config
   (unbind-key "M-n" lsp-signature-mode-map)
   (unbind-key "M-p" lsp-signature-mode-map)
@@ -64,6 +61,8 @@
 	lsp-prefer-flymake nil
 	lsp-log-io nil
 	lsp-enable-xref t
+	lsp-signature-auto-activate nil
+	lsp-eldoc-hook nil
 	lsp-keep-workspace-alive nil))
 
 (use-package company-lsp
