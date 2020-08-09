@@ -15,6 +15,7 @@
 			   markrepedersen/website-dir))))
   :config
   (setq org-directory markrepedersen/org-dir
+	org-startup-with-inline-images t
 	org-attach-id-dir markrepedersen/org-attachments-dir
 	org-agenda-files `(,org-directory)
 	org-return-follows-link t
@@ -83,7 +84,7 @@
 
 
 (pretty-hydra-define org-mode-functions
-  (:color amaranth :quit-key "q" :title (with-mode-icon 'org-mode "Org mode"))
+  (:quit-key "q" :title (with-mode-icon 'org-mode "Org mode"))
   ("Clock"
    (("i" (lambda () (interactive) (org-clock-in '(4))) "Clock in")
     ("o" org-clock-out "Clock out")

@@ -1,29 +1,38 @@
-(use-package rust-mode
-  :hook ((cargo-minor-mode))
-  :mode-hydra
-  (rust-mode
-   (:title (with-mode-icon 'rust-mode "Rust"))
-   ("Build"
-    (("b" rustic-cargo-build "Build" :exit)
-     ("r" rustic-cargo-run "Run" :exit)
-     ("t" rustic-cargo-test "Test")
-     ("T" rustic-cargo-current-test "Test (current)")
-     ("B" (lambda () (setq rustic-compile-backtrace t) "Backtrace")))
+(when (>= emacs-major-version 26)
+  (defun my-rustic-mode-hook-fn ()
+    "needed for lsp-format-buffer to indent with 4 spaces"
+    (setq tab-width 4
+          indent-tabs-mode nil))
 
-    "Init"
-    (("C" rustic-cargo-new "New")
-     ("I" cargo-process-init "New"))
+  (use-package rustic
+    :hook ((cargo-minor-mode)
+	   (my-rustic-mode-hook-fn))
+    :mode-hydra
+    (rustic-mode
+     (:title (with-mode-icon 'rust-mode "Rust"))
+     ("Build"
+      (("b" rustic-cargo-build "Build" :exit)
+       ("r" rustic-cargo-run "Run" :exit)
+       ("t" rustic-cargo-test "Test")
+       ("T" rustic-cargo-current-test "Test (current)")
+       ("B" (lambda () (setq rustic-compile-backtrace t) "Backtrace")))
 
-    "Errors"
-    (("n" next-error "Next" :exit nil)
-     ("p" previous-error "Previous" :exit nil)
-     ("f" first-error "First")
-     ("k" kill-compilation "Stop"))))
-  :config
-  (setq rust-format-on-save t)
-  (setq-default xref-prompt-for-identifier nil)
-  (add-hook 'rust-mode-hook
-            (lambda () (setq indent-tabs-mode nil))))
+      "Init"
+      (("C" rustic-cargo-new "New")
+       ("I" cargo-process-init "New"))
+
+      "Errors"
+      (("n" next-error "Next" :exit nil)
+       ("p" previous-error "Previous" :exit nil)
+       ("f" first-error "First")
+       ("k" kill-compilation "Stop"))))
+    :init
+    ;; to use rustic-mode even if rust-mode also installed
+    (setq auto-mode-alist (delete '("\\.rs\\'" . rust-mode) auto-mode-alist))
+    :config
+    (setq-default xref-prompt-for-identifier nil)
+    (add-hook 'rustic-mode-hook
+              (lambda () (setq indent-tabs-mode nil)))))
 
 (use-package flycheck-rust
   :hook ((flycheck-mode . flycheck-rust-setup)))

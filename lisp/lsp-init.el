@@ -24,7 +24,7 @@
     :library-folders-fn nil)))
 
 (use-package lsp-mode
-  :hook ((rust-mode . lsp)
+  :hook ((rustic-mode . lsp)
 	 (sh-mode . lsp)
 	 (c-mode . lsp)
 	 (c++-mode . lsp)
@@ -51,7 +51,8 @@
   :bind (("C-c l" . lsp-mode-hydra/body))
   :init
   (setq read-process-output-max (* 1024 1024 10)
-	lsp-rust-server 'rust-analyzer)
+	lsp-rust-server 'rust-analyzer
+	lsp-disabled-clients '(rls))
   :config
   (unbind-key "M-n" lsp-signature-mode-map)
   (unbind-key "M-p" lsp-signature-mode-map)
