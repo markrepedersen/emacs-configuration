@@ -26,9 +26,11 @@
 (use-package lsp-mode
   :hook ((rustic-mode . lsp)
 	 (sh-mode . lsp)
+	 (html-mode . lsp)
 	 (c-mode . lsp)
 	 (c++-mode . lsp)
 	 (java-mode . lsp)
+	 (javascript-mode . lsp)
 	 (typescript-mode . lsp)
 	 (groovy-mode . lsp)
 	 (python-mode . lsp)

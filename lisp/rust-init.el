@@ -29,6 +29,7 @@
     :init
     ;; to use rustic-mode even if rust-mode also installed
     (setq auto-mode-alist (delete '("\\.rs\\'" . rust-mode) auto-mode-alist))
+    (add-to-list 'auto-mode-alist '("\\.rs\\'" . rustic-mode))
     :config
     (setq-default xref-prompt-for-identifier nil)
     (add-hook 'rustic-mode-hook
