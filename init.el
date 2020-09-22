@@ -180,7 +180,10 @@
 	  enable-recursive-minibuffers t))
 
   (update-to-load-path my-load-file-dir)
-  (require 'use-package))
+  (require 'use-package)
+  (use-package use-package-ensure-system-package
+    :ensure t)
+  )
 
 (init-settings)
 (load-hydras)
