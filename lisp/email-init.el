@@ -3,11 +3,16 @@
   :commands (mu4e mu4e-headers-search mu4e-compose-new mu4e~proc-add)
   :hook ((mu4e-compose-mode-hook . flycheck-mode)
 	 (mu4e-view-mode-hook . (lambda()
-				  (visual-line-mode)
 				  (local-set-key (kbd "<RET>") 'mu4e~view-browse-url-from-binding)
 				  (local-set-key (kbd "<tab>") 'shr-next-link)
 				  (local-set-key (kbd "<backtab>") 'shr-previous-link))))
   :config
+  (add-to-list 'mu4e-view-actions '("View in Browser" . mu4e-action-view-in-browser) t)
+
+  (when (executable-find "w3m")
+    (setq mu4e-view-prefer-html t)
+    (setq mu4e-html2text-command "w3m -dump -T text/html"))
+
   (setq mail-user-agent 'mu4e-user-agent
 	mu4e-index-cleanup nil ;; don't do a full cleanup check
 	mu4e-index-lazy-check t
@@ -17,12 +22,8 @@
 	mu4e-sent-messages-behavior 'delete
 	mu4e-attachment-dir (expand-file-name "~/Downloads")
 	mu4e-compose-signature-auto-include nil
-	mu4e-compose-in-new-frame t
-	mu4e-drafts-folder "/gmail/drafts"
 	mu4e-get-mail-command "mbsync -a"
 	mu4e-maildir (expand-file-name "~/mail")
-	mu4e-refile-folder "/gmail/archived"
-	mu4e-sent-folder "/gmail/sent"
 	mu4e-headers-fields '((:human-date .  12) ;; alternatively, use :human-date
                               ;; (:flags      .   6)
                               (:from       .  24)
@@ -35,7 +36,10 @@
 				("/gmail/sent" . ?s)
 				("/gmail/starred" . ?S))
 	mu4e-trash-folder "/gmail/trash"
-	mu4e-update-interval 300
+	mu4e-drafts-folder "/gmail/drafts"
+	mu4e-refile-folder "/gmail/archived"
+	mu4e-sent-folder "/gmail/sent"
+	mu4e-update-interval 180
 	mu4e-use-fancy-chars t
 	mu4e-view-show-addresses t
 	mu4e-change-filenames-when-moving t
@@ -57,9 +61,14 @@
 
 (use-package mu4e-alert
   :after mu4e
-  :hook ((after-init . mu4e-alert-enable-mode-line-display)
-         (after-init . mu4e-alert-enable-notifications))
-  :config (mu4e-alert-set-default-style 'libnotify))
+  :config
+  (mu4e-alert-enable-mode-line-display)
+  (mu4e-alert-enable-notifications)
+  (mu4e-alert-set-default-style 'libnotify)
+  (setq mu4e-alert-interesting-mail-query (concat
+					   "flag:unread"
+					   " AND NOT flag:trashed"
+					   " AND maildir:/INBOX")))
 
 (pretty-hydra-define email-functions
   (:title (with-faicon "toggle-on" "Email" 1 -0.05))
