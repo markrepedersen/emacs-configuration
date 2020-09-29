@@ -179,11 +179,7 @@
 	  byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local)
 	  enable-recursive-minibuffers t))
 
-  (update-to-load-path my-load-file-dir)
-  (require 'use-package)
-  (use-package use-package-ensure-system-package
-    :ensure t)
-  )
+  (update-to-load-path my-load-file-dir))
 
 (init-settings)
 (load-hydras)

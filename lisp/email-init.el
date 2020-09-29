@@ -7,7 +7,11 @@
 				  (local-set-key (kbd "<tab>") 'shr-next-link)
 				  (local-set-key (kbd "<backtab>") 'shr-previous-link))))
   :config
-  (add-to-list 'mu4e-view-actions '("View in Browser" . mu4e-action-view-in-browser) t)
+  (defun markrepedersen/mu4e-action-view-in-browser-webkit (msg)
+    (let ((url (concat "file://" (mu4e~write-body-to-html msg))))
+      (xwidget-webkit-browse-url url)))
+
+  (add-to-list 'mu4e-view-actions '("View in Browser" . markrepedersen/mu4e-action-view-in-browser-webkit) t)
 
   (when (executable-find "w3m")
     (setq mu4e-view-prefer-html t)
@@ -39,7 +43,7 @@
 	mu4e-drafts-folder "/gmail/drafts"
 	mu4e-refile-folder "/gmail/archived"
 	mu4e-sent-folder "/gmail/sent"
-	mu4e-update-interval 180
+	mu4e-update-interval 10
 	mu4e-use-fancy-chars t
 	mu4e-view-show-addresses t
 	mu4e-change-filenames-when-moving t

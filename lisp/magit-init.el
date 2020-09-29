@@ -28,7 +28,8 @@
      ("Cn" (lambda () (interactive) (magit-clean "-dffxn")) "(-dffxn)")
      ("Cr" magit-reset "reset"))
     "Checkout"
-    (("Cb" magit-checkout "branch")
+    (("i" magit-init "init")
+     ("Cb" magit-checkout "branch")
      ("Cf" magit-file-checkout "file"))
     "Branches"
     (("bx" magit-branch "branch")
