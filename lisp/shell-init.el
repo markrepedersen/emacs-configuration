@@ -87,30 +87,33 @@
 
 (use-package vterm-toggle
   :config
-  (vterm-toggle-fullscreen-p nil)
+  (setq vterm-toggle-fullscreen-p nil)
   (add-to-list 'display-buffer-alist
-               '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+               '((lambda (bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
                  (display-buffer-reuse-window display-buffer-at-bottom)
                  (display-buffer-reuse-window display-buffer-in-direction)
                  (direction . bottom)
                  (dedicated . t)
                  (reusable-frames . visible)
                  (window-height . 0.3)))
-  :bind
-  (("H-t t" . vterm-toggle)
-   ("H-T" . vterm-toggle-cd)
-   ("H-t d" . vterm-toggle-insert-cd)
-   ("H-t n" . vterm-toggle-forward)
-   ("H-t p" . vterm-toggle-forward)
-   ))
+  :pretty-hydra
+  ((:color teal :quit-key "q" :title (with-mode-icon 'vterm-mode "Vterm"))
+   ("Shell"
+    (("N" vterm "New")
+     ("t" vterm-toggle "Toggle")
+     ("r" vterm-toggle-cd "New (Remote)")
+     ("x" vterm-toggle-insert-cd "cd remote")
+     ("n" vterm-toggle-forward "Next")
+     ("p" vterm-toggle-backward "Previous"))))
+  :bind (("C-c v" . vterm-toggle-hydra/body)))
 
-(use-package shell-pop
-  :defer t
-  :bind ("C-t" . shell-pop)
-  :init (setq shell-pop-window-size 40
-	      shell-pop-window-position "bottom"
-	      shell-pop-shell-type
-	      (cond ((fboundp 'vterm) '("vterm" "*vterm*" #'vterm))
-		    (*sys/win32* '("eshell" "*eshell*" #'eshell))
-		    (t '("terminal" "*terminal*"
-                         (lambda () (term shell-pop-term-shell)))))))
+;; (use-package shell-pop
+;;   :defer t
+;;   :bind ("C-t" . shell-pop)
+;;   :init (setq shell-pop-window-size 40
+;; 	      shell-pop-window-position "bottom"
+;; 	      shell-pop-shell-type
+;; 	      (cond ((fboundp 'vterm) '("vterm" "*vterm*" #'vterm))
+;; 		    (*sys/win32* '("eshell" "*eshell*" #'eshell))
+;; 		    (t '("terminal" "*terminal*"
+;;                          (lambda () (term shell-pop-term-shell)))))))
