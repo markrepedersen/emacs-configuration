@@ -20,7 +20,6 @@
   (setq mail-user-agent 'mu4e-user-agent
 	mu4e-index-cleanup nil ;; don't do a full cleanup check
 	mu4e-index-lazy-check t
-	mu4e-headers-show-threads nil ;; Use "P" to check threads
 	mu4e-mu-binary "/usr/local/bin/mu"
 	message-kill-buffer-on-exit t
 	mu4e-sent-messages-behavior 'delete
@@ -74,8 +73,11 @@
 					   " AND NOT flag:trashed"
 					   " AND maildir:/INBOX")))
 
+(use-package helm-mu
+  :after helm)
+
 (pretty-hydra-define email-functions
-  (:title (with-faicon "toggle-on" "Email" 1 -0.05))
+  (:color teal :title (with-faicon "toggle-on" "Email" 1 -0.05))
   ("Bookmarks"
    (("s" (mu4e-headers-search) "query")
     ("i" (mu4e-headers-search "maildir:/gmail/inbox") "inbox")

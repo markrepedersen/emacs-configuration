@@ -9,4 +9,4 @@
       :after flycheck
       :config
       (flycheck-posframe-configure-pretty-defaults)
-      (setq flycheck-posframe-position 'window-top-left-corner)))
+      (setq flycheck-posframe-position 'window-bottom-right-corner)))

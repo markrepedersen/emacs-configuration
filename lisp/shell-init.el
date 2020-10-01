@@ -85,7 +85,25 @@
   (use-package vterm
     :load-path "~/.emacs.d/emacs-libvterm/"))
 
-;; Shell Pop
+(use-package vterm-toggle
+  :config
+  (vterm-toggle-fullscreen-p nil)
+  (add-to-list 'display-buffer-alist
+               '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                 (display-buffer-reuse-window display-buffer-at-bottom)
+                 (display-buffer-reuse-window display-buffer-in-direction)
+                 (direction . bottom)
+                 (dedicated . t)
+                 (reusable-frames . visible)
+                 (window-height . 0.3)))
+  :bind
+  (("H-t t" . vterm-toggle)
+   ("H-T" . vterm-toggle-cd)
+   ("H-t d" . vterm-toggle-insert-cd)
+   ("H-t n" . vterm-toggle-forward)
+   ("H-t p" . vterm-toggle-forward)
+   ))
+
 (use-package shell-pop
   :defer t
   :bind ("C-t" . shell-pop)
