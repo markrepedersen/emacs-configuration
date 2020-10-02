@@ -69,39 +69,40 @@
       (message "File '%s' was deleted" filename))))
 
 (use-package ace-window
-  :bind ("C-x o" . ace-window)
+  :after centaur-tabs
+  :bind (("C-x o" . ace-window)
+	 ("C-c a" . ace-window-hydra/body))
+  :pretty-hydra
+  ((:color teal :title "Window Manager")
+   ("Actions"
+    (("TAB" other-window "switch")
+     ("x" ace-delete-window "pop current")
+     ("m" ace-delete-other-windows "keep only current")
+     ("s" ace-swap-window "swap")
+     ("a" ace-select-window "select")
+     ("r" rename-current-buffer-file "rename file")
+     ("d" delete-current-buffer-file "delete file")
+     ("g" centaur-tabs-kill-all-buffers-in-current-group)
+     ("G" centaur-tabs-kill-other-buffers-in-current-group))
+
+    "Resize"
+    (("<left>" move-border-left "←" :exit nil)
+     ("<down>" move-border-down "↓" :exit nil)
+     ("<up>" move-border-up "↑" :exit nil)
+     ("<right>" move-border-right "→" :exit nil)
+     ("n" balance-windows "balance")
+     ("F" toggle-frame-fullscreen "toggle fullscreen")
+     ("M" toggle-frame-maximized "toggle maximized"))
+
+    "Split"
+    (("b" split-window-right "horizontally")
+     ("B" split-window-horizontally-instead "horizontally instead")
+     ("v" split-window-below "vertically")
+     ("V" split-window-vertically-instead "vertically instead")
+     ("T" treemacs "project explorer" :toggle t))
+
+    "Zoom"
+    (("+" zoom-in "in" :exit nil)
+     ("-" zoom-out "out" :exit nil)
+     ("0" jp-zoom-default "reset"))))
   :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
-
-(pretty-hydra-define window-manager-hydra
-  (:color teal :title "Window Manager")
-  ("Actions"
-   (("TAB" other-window "switch")
-    ("x" ace-delete-window "pop current")
-    ("m" ace-delete-other-windows "keep only current")
-    ("s" ace-swap-window "swap")
-    ("a" ace-select-window "select")
-    ("r" rename-current-buffer-file "rename file")
-    ("d" delete-current-buffer-file "delete file"))
-
-   "Resize"
-   (("<left>" move-border-left "←" :exit nil)
-    ("<down>" move-border-down "↓" :exit nil)
-    ("<up>" move-border-up "↑" :exit nil)
-    ("<right>" move-border-right "→" :exit nil)
-    ("n" balance-windows "balance")
-    ("F" toggle-frame-fullscreen "toggle fullscreen")
-    ("M" toggle-frame-maximized "toggle maximized"))
-
-   "Split"
-   (("b" split-window-right "horizontally")
-    ("B" split-window-horizontally-instead "horizontally instead")
-    ("v" split-window-below "vertically")
-    ("V" split-window-vertically-instead "vertically instead")
-    ("T" treemacs "project explorer" :toggle t))
-
-   "Zoom"
-   (("+" zoom-in "in" :exit nil)
-    ("-" zoom-out "out" :exit nil)
-    ("0" jp-zoom-default "reset"))))
-
-(global-set-key (kbd "C-c a") 'window-manager-hydra/body)
