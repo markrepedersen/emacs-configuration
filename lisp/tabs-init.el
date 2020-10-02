@@ -1,19 +1,24 @@
 (use-package centaur-tabs
+  :hook
+  (dashboard-mode . centaur-tabs-local-mode)
+  (term-mode . centaur-tabs-local-mode)
+  (calendar-mode . centaur-tabs-local-mode)
+  (org-agenda-mode . centaur-tabs-local-mode)
+  (helpful-mode . centaur-tabs-local-mode)
   :bind
   ("C-x p" . centaur-tabs-backward)
   ("C-x n" . centaur-tabs-forward)
   :demand
   :config
   (centaur-tabs-mode t)
-  (centaur-tabs-enable-buffer-reordering)
-  (centaur-tabs-group-by-projectile-project)
-  (setq centaur-tabs-style "wave"
+  (centaur-tabs-headline-match)
+
+  (setq centaur-tabs-style "bar"
 	centaur-tabs-height 32
 	centaur-tabs-show-navigation-buttons t
+	centaur-tabs-set-modified-marker t
 	centaur-tabs-set-icons t
-	centaur-tabs-gray-out-icons 'buffer
-	centaur-tabs-set-bar 'over
-	centaur-tabs-set-close-button nil)
+	centaur-tabs-set-bar 'left)
 
   (defun centaur-tabs-buffer-groups ()
     "`centaur-tabs-buffer-groups' control buffers' group rules.

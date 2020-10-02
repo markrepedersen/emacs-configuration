@@ -7,7 +7,7 @@
   :config
   (setq ccls-executable (executable-find "ccls")
 	ccls-sem-highlight-method 'font-lock
-	flycheck-clang-include-path (list (expand-file-name "/usr/include/c++/"))
+	;; flycheck-clang-include-path (list (expand-file-name "/usr/include/c++/"))
 	ccls-enable-skipped-ranges nil)
   (lsp-register-client
    (make-lsp-client
@@ -105,7 +105,7 @@
 	      lsp-ui-sideline-show-diagnostics t
 	      lsp-ui-sideline-ignore-duplicate t
 	      lsp-ui-imenu-enable t
-	      lsp-ui-doc-border   "orange"
+	      lsp-ui-doc-border   "cyan"
 	      lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
                                     ,(face-foreground 'font-lock-string-face)
                                     ,(face-foreground 'font-lock-constant-face)

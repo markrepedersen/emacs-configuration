@@ -3,7 +3,11 @@
   :diminish)
 
 (use-package docker-compose-mode
-  :mode "docker-compose.*\.yml\\'")
+  :mode "docker-compose[a-zA-Z.-]*\\'"
+  :mode-hydra
+  ((:color teal :quit-key "q" :title (with-mode-icon 'dockerfile-mode "Docker-compose mode"))
+   ("Docker Compose"
+    (("d" docker-compose "Options")))))
 
 (use-package docker-tramp
   :after tramp

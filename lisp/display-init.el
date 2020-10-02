@@ -22,29 +22,20 @@
   (when (not (member "all-the-icons" (font-family-list)))
     (all-the-icons-install-fonts t)))
 
-(use-package doom-modeline :init (doom-modeline-mode 1))
-
 (use-package doom-themes
   :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  (load-theme 'doom-vibrant t))
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
 
-(use-package theme-looper
-  :bind (:map global-map ("C-c C-c t" . theme-looper-hydra/body))
-  :pretty-hydra
-  ("Update"
-   (("n" theme-looper-enable-next-theme "next")
-    ("p" theme-looper-enable-previous-theme "previous")))
-  :config
-  (theme-looper-set-favorite-themes '(doom-one
-				      doom-acario-dark
-				      doom-city-lights
-				      doom-challenger-deep
-				      doom-manegarm
-				      doom-outrun-electric
-				      doom-spacegrey
-				      doom-tomorrow-day)))
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
+(use-package doom-modeline :init (doom-modeline-mode 1))
 
 (pretty-hydra-define toggle-functions
   (:title (with-faicon "toggle-on" "Toggles" 1 -0.05))
@@ -61,9 +52,6 @@
     ("l" hl-line-mode "line" :toggle t)
     ("x" highlight-sexp-mode "sexp" :toggle t)
     ("t" hl-todo-mode "todo" :toggle t))
-   "UI"
-   (("C-n" theme-looper-enable-next-theme "next")
-    ("C-p" theme-looper-enable-previous-theme "previous"))
    "Coding"
    (("p" smartparens-mode "smartparens" :toggle t)
     ("P" smartparens-strict-mode "smartparens strict" :toggle t)

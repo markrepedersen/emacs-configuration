@@ -105,7 +105,8 @@
      ("x" vterm-toggle-insert-cd "cd remote")
      ("n" vterm-toggle-forward "Next")
      ("p" vterm-toggle-backward "Previous"))))
-  :bind (("C-c v" . vterm-toggle-hydra/body)))
+  :bind (("C-c v" . vterm-toggle-hydra/body)
+	 ("C-t" . vterm-toggle)))
 
 ;; (use-package shell-pop
 ;;   :defer t
