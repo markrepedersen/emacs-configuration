@@ -1,13 +1,9 @@
-(use-package modern-cpp-font-lock
-  :init (modern-c++-font-lock-global-mode t))
-
 (use-package ccls
   :hook ((c-mode c++-mode objc-mode) .
          (lambda () (require 'ccls) (lsp)))
   :config
   (setq ccls-executable (executable-find "ccls")
 	ccls-sem-highlight-method 'font-lock
-	;; flycheck-clang-include-path (list (expand-file-name "/usr/include/c++/"))
 	ccls-enable-skipped-ranges nil)
   (lsp-register-client
    (make-lsp-client
@@ -38,12 +34,16 @@
   :pretty-hydra
   ((:color teal :quit-key "q" :title (with-mode-icon 'lsp-mode "LSP mode"))
    ("Find"
-    (("d" lsp-goto-implementation         "Goto implementation")
+    (("i" lsp-goto-implementation         "Goto implementation")
      ("r" lsp-find-references             "Find references")
      ("o" lsp-describe-thing-at-point     "Describe thing"))
 
+    "Debugging"
+    (("d" dap-debug "Debug")
+     ("e" dap-debug-edit-template "Edit debug template"))
+
     "Peek"
-    (("D" lsp-ui-peek-find-implementation "Peek implementation")
+    (("I" lsp-ui-peek-find-implementation "Peek implementation")
      ("R" lsp-ui-peek-find-references     "Peek references"))
 
     "Fix/Refactor"
@@ -60,6 +60,7 @@
   (unbind-key "M-p" lsp-signature-mode-map)
   (push "[/\\\\][^/\\\\]*\\.\\(json\\|html\\|jade\\)$" lsp-file-watch-ignored)
   (push "[/\\\\]build$" lsp-file-watch-ignored)
+  (push "[/\\\\]target$" lsp-file-watch-ignored)
   (setq lsp-idle-delay 0.1000
 	lsp-prefer-flymake nil
 	lsp-log-io nil
@@ -67,6 +68,23 @@
 	lsp-signature-auto-activate nil
 	lsp-eldoc-hook nil
 	lsp-keep-workspace-alive nil))
+
+
+;; Refer to https://code.visualstudio.com/docs/cpp/launch-json-reference for C++ dap-mode launch.json configuration arguments.
+(use-package dap-mode
+  :commands dap-mode
+  :hook (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
+  :config
+  (dap-mode 1)
+  (require 'dap-ui)
+  (dap-ui-mode 1)
+  (dap-tooltip-mode 1)
+  (tooltip-mode 1)
+  (dap-ui-controls-mode 1)
+  (dap-ui-mode 1)
+  (require 'dap-lldb)
+  (require 'dap-gdb-lldb)
+  (require 'dap-cpptools))
 
 (use-package company-lsp
   :defer t
@@ -105,7 +123,7 @@
 	      lsp-ui-sideline-show-diagnostics t
 	      lsp-ui-sideline-ignore-duplicate t
 	      lsp-ui-imenu-enable t
-	      lsp-ui-doc-border   "cyan"
+	      lsp-ui-doc-border "cyan"
 	      lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
                                     ,(face-foreground 'font-lock-string-face)
                                     ,(face-foreground 'font-lock-constant-face)

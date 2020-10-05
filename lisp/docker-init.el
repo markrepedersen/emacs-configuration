@@ -1,8 +1,10 @@
 (use-package docker
+  :defer t
   :bind ("C-c d" . docker)
   :diminish)
 
 (use-package docker-compose-mode
+  :defer t
   :mode "docker-compose[a-zA-Z.-]*\\'"
   :mode-hydra
   ((:color teal :quit-key "q" :title (with-mode-icon 'dockerfile-mode "Docker-compose mode"))
@@ -11,9 +13,10 @@
 
 (use-package docker-tramp
   :after tramp
-  :defer 5)
+  :defer t)
 
 (use-package dockerfile-mode
+  :defer t
   :mode "Dockerfile[a-zA-Z.-]*\\'"
   :config
   (put 'dockerfile-image-name 'safe-local-variable #'stringp)

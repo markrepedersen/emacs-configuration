@@ -69,6 +69,7 @@
       (message "File '%s' was deleted" filename))))
 
 (use-package ace-window
+  :defer t
   :after centaur-tabs
   :bind (("C-x o" . ace-window)
 	 ("C-c a" . ace-window-hydra/body))
@@ -82,8 +83,8 @@
      ("a" ace-select-window "select")
      ("r" rename-current-buffer-file "rename file")
      ("d" delete-current-buffer-file "delete file")
-     ("g" centaur-tabs-kill-all-buffers-in-current-group)
-     ("G" centaur-tabs-kill-other-buffers-in-current-group))
+     ("g" centaur-tabs-kill-all-buffers-in-current-group "kill all group tabs")
+     ("G" centaur-tabs-kill-other-buffers-in-current-group "kill other group tabs"))
 
     "Resize"
     (("<left>" move-border-left "←" :exit nil)
