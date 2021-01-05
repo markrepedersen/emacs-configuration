@@ -35,3 +35,10 @@ transient/
 /groovy-language-server/
 /org-gcal/
 /rust-analyzer/
+.extension
+*.ls
+games/
+network-security.data
+request
+to-be-dumped.el
+workspace

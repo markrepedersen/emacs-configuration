@@ -1,4 +1,5 @@
 (use-package projectile
+  :defer t
   :config
   (add-to-list 'projectile-globally-ignored-directories "*node_modules")
   (setq projectile-enable-caching t

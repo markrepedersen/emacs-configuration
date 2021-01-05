@@ -1,4 +1,5 @@
 (use-package emms
+  :defer t
   :after hydra
   :pretty-hydra
   ((:color teal :quit-key "q")

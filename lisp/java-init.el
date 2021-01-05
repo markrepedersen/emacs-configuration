@@ -1,3 +1,3 @@
 (use-package lsp-java
   :defer t
-  :hook  (java-mode . lsp))
+  :after lsp-mode)

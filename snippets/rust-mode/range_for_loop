@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: for loop
+# key: range
+# --
+for $1 in 0..$1 {
+    $2
+}

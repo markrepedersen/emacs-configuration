@@ -4,6 +4,7 @@
 (defvar markrepedersen/org-projects-file (concat markrepedersen/org-dir "/project.org"))
 
 (use-package org
+  :defer t
   :bind (("C-c o" . org-mode-hydra/body))
   :preface
   (defun create-blog-post(post-name)

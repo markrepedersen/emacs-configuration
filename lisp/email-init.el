@@ -1,4 +1,5 @@
 (use-package mu4e
+  :defer t
   :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
   :commands (mu4e mu4e-headers-search mu4e-compose-new mu4e~proc-add)
   :hook ((mu4e-compose-mode-hook . flycheck-mode)

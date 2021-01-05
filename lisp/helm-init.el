@@ -1,9 +1,26 @@
+(use-package helm-xref
+  :defer t
+  :requires helm
+  :preface
+  (defadvice dired-do-find-regexp-and-replace
+      (around netrom-no-helm-dired-do-find-regexp-and-replace activate)
+    (let ((xref-show-xrefs-function 'xref--show-xref-buffer))
+      ad-do-it))
+  (defun netrom/xref-find-apropos-at-point (pattern)
+    "Xref find apropos at point, if anything, and show prompt for PATTERN."
+    (interactive
+     (list
+      (read-string "Xref find apropos of: " (thing-at-point 'symbol))))
+    (xref-find-apropos pattern))
+  :config
+  (setq-default xref-show-xrefs-function 'helm-xref-show-xrefs)
+  (setq helm-xref-candidate-formatting-function 'helm-xref-format-candidate-long))
+
 (use-package helm
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)
 	 ("C-x b" . helm-mini)
-	 ("C-x C-b" . helm-buffers-list)
-	 ("C-c f" . helm-imenu))
+	 ("C-x C-b" . helm-buffers-list))
   :config
   (setq helm-candidate-number-limit 100
 	completion-styles '(flex)
@@ -37,7 +54,10 @@
     ("l" (lambda () (interactive) (helm-do-ag-project-root-with-flag "-l")) "for files" :exit t))
    "Navigation"
    (("m" helm-ag-clear-stack "clear stack" :exit t)
-    ("." helm-ag-pop-stack "back" :exit t))))
+    ("." helm-ag-pop-stack "back" :exit t)))
+  :config
+  (setq helm-ag-fuzzy-match t)
+  )
 
 (use-package helm-swoop
   :bind

@@ -61,6 +61,63 @@
 
     (defvar my-load-file-dir (expand-file-name "lisp" user-emacs-directory))))
 
+(defun delete-intermediate-dired-buffers ()
+  (use-package dired
+    :ensure nil
+    :config
+    (setq delete-by-moving-to-trash t)
+    (eval-after-load "dired"
+      #'(lambda ()
+          (put 'dired-find-alternate-file 'disabled nil)
+          (define-key dired-mode-map (kbd "RET") #'dired-find-alternate-file)))))
+
+(defun dump-custom ()
+  "Dump custom-set-variables to a garbage file and don’t load it"
+  (use-package cus-edit
+    :ensure nil
+    :config
+    (setq custom-file (concat user-emacs-directory "to-be-dumped.el"))))
+
+(defun match-parens ()
+  (use-package elec-pair
+    :ensure nil
+    :hook (prog-mode . electric-pair-mode)))
+
+(defun change-frame-size-and-font ()
+  "Changes the frame to be maximized on startup and changes the font"
+  (use-package frame
+    :preface
+    (defun markrepedersen/set-default-font ()
+      (interactive)
+      (when (member "Consolas" (font-family-list))
+	(set-face-attribute 'default nil :family "Consolas"))
+      (set-face-attribute 'default nil
+                          :height 120
+                          :weight 'normal))
+    :ensure nil
+    :config
+    (setq initial-frame-alist '((fullscreen . maximized)))
+    (markrepedersen/set-default-font))
+  )
+
+(defun change-scrolling-speed ()
+  "The default scrolling speed is quite fast; tone it down"
+  (use-package mwheel
+    :ensure nil
+    :config (setq mouse-wheel-scroll-amount '(2 ((shift) . 1))
+                  mouse-wheel-progressive-speed nil)))
+
+(defun sync-buffer-external ()
+  "In case of external (outside of Emacs) changes, auto refresh the buffer."
+  (use-package autorevert
+    :ensure nil
+    :config
+    (global-auto-revert-mode +1)
+    (setq auto-revert-interval 2
+          auto-revert-check-vc-info t
+          global-auto-revert-non-file-buffers t
+          auto-revert-verbose nil)))
+
 (defun load-hydras ()
   "Loads hydra related packages."
   (use-package hydra
@@ -165,6 +222,11 @@
     (package-refresh-contents)
     (package-install 'use-package))
 
+  (setq-default create-lockfiles nil)
+  (setq-default compilation-always-kill t) ; kill compilation process before starting another
+  (setq-default compilation-ask-about-save nil) ; save all buffers on `compile'
+  (setq-default compilation-scroll-output t)
+
   (eval-and-compile
     (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))
 	  use-package-always-ensure t
@@ -175,7 +237,8 @@
           package--init-file-ensured t
           package-enable-at-startup nil
 	  inhibit-startup-screen t
-	  initial-scratch-message nil
+	  initial-major-mode 'text-mode
+	  initial-scratch-message "Hello, Mark.\n"
 	  byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local)
 	  enable-recursive-minibuffers t))
 
@@ -183,4 +246,10 @@
 
 (init-settings)
 (load-hydras)
+(delete-intermediate-dired-buffers)
+(dump-custom)
+(match-parens)
+(change-frame-size-and-font)
+(change-scrolling-speed)
+(sync-buffer-external)
 (load-directory my-load-file-dir)

@@ -1,4 +1,5 @@
 (use-package engine-mode
+  :defer t
   :pretty-hydra
   ((:color teal :quit-key "q")
    ("Engine"

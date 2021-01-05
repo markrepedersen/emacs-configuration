@@ -2,7 +2,9 @@
   :hook ((c-mode c++-mode objc-mode) .
          (lambda () (require 'ccls) (lsp)))
   :config
+  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
   (setq ccls-executable (executable-find "ccls")
+	lsp-prefer-flymake nil
 	ccls-sem-highlight-method 'font-lock
 	ccls-enable-skipped-ranges nil)
   (lsp-register-client
@@ -28,7 +30,7 @@
 	 (java-mode . lsp)
 	 (javascript-mode . lsp)
 	 (typescript-mode . lsp)
-	 (groovy-mode . lsp)
+	 (go-mode . lsp)
 	 (python-mode . lsp)
 	 (linum-mode))
   :pretty-hydra
@@ -44,11 +46,14 @@
 
     "Peek"
     (("I" lsp-ui-peek-find-implementation "Peek implementation")
-     ("R" lsp-ui-peek-find-references     "Peek references"))
+     ("R" lsp-ui-peek-find-references     "Peek references")
+     ("F" lsp-ui-doc-frame-focus          "Focus doc")
+     ("U" lsp-ui-doc-frame-unfocus        "Unfocus doc")
+     )
 
     "Fix/Refactor"
     (("n" lsp-rename                     "Rename symbol")
-     ("f" lsp-format-region              "Format region")
+     ("f" lsp-format-buffer              "Format buffer")
      ("x" lsp-execute-code-action        "Execute code action"))))
   :bind (("C-c l" . lsp-mode-hydra/body))
   :init
@@ -62,6 +67,9 @@
   (push "[/\\\\]build$" lsp-file-watch-ignored)
   (push "[/\\\\]target$" lsp-file-watch-ignored)
   (setq lsp-idle-delay 0.1000
+	lsp-enable-file-watchers nil
+	lsp-enable-indentation t
+	lsp-file-watch-threshold 500
 	lsp-prefer-flymake nil
 	lsp-log-io nil
 	lsp-enable-xref t
@@ -117,19 +125,17 @@
 	      lsp-ui-doc-include-signature t
 	      lsp-ui-doc-position 'top
 	      lsp-ui-doc-border (face-foreground 'default)
+	      lsp-ui-doc-border "cyan"
 	      lsp-eldoc-enable-hover t
 	      lsp-ui-sideline-enable nil
-	      lsp-ui-sideline-show-hover t
-	      lsp-ui-sideline-show-diagnostics t
-	      lsp-ui-sideline-ignore-duplicate t
+	      lsp-ui-doc-use-childframe t
 	      lsp-ui-imenu-enable t
-	      lsp-ui-doc-border "cyan"
 	      lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
                                     ,(face-foreground 'font-lock-string-face)
                                     ,(face-foreground 'font-lock-constant-face)
                                     ,(face-foreground 'font-lock-variable-name-face)))
   :config
-  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
+  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 20))
   (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
   (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
   (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))

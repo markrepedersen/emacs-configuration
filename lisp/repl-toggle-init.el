@@ -1,10 +1,10 @@
 (use-package repl-toggle
-  :bind (("C-c C-'" . repl-toggle-mode))
+  :defer t
+  :bind (("C-c C-r" . rtog/toggle-repl))
   :config
-  (setq rtog/mode-repl-alist
-   '((emacs-lisp-mode . ielm)
-     (python-mode . elpy-shell-switch-to-shell)
-     (js-mode . nodejs-repl)
-     (typescript-mode . run-ts))
-   rtog/fullscreen nil)
+  (setq rtog/fullscreen t
+	rtog/mode-repl-alist '((emacs-lisp-mode . ielm)
+			       (python-mode . elpy-shell-switch-to-shell)
+			       (js-mode . nodejs-repl)
+			       (typescript-mode . run-ts)))
   (repl-toggle-mode))

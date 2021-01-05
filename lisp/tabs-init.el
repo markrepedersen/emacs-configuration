@@ -5,6 +5,8 @@
   (shell-mode . centaur-tabs-local-mode)
   (vterm-mode . centaur-tabs-local-mode)
   (calendar-mode . centaur-tabs-local-mode)
+  (fundamental-mode . centaur-tabs-local-mode)
+  (Tooltip . centaur-tabs-local-mode)
   (org-agenda-mode . centaur-tabs-local-mode)
   (helpful-mode . centaur-tabs-local-mode)
   :bind

@@ -8,6 +8,7 @@
        (s-concat "Git repo: " p)))))
 
 (use-package magit
+  :defer t
   :after hydra
   :pretty-hydra
   ((:color teal :title (markrepedersen/current-git-repo))
