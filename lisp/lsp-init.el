@@ -22,6 +22,7 @@
     :library-folders-fn nil)))
 
 (use-package lsp-mode
+  :after hydra
   :hook ((rustic-mode . lsp)
 	 (sh-mode . lsp)
 	 (html-mode . lsp)

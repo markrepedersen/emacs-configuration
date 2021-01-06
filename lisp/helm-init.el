@@ -41,6 +41,7 @@
   (helm-autoresize-mode t))
 
 (use-package helm-ag
+  :after hydra
   :preface
   (defun helm-do-ag-project-root-with-flag (flag)
     (let ((helm-ag-command-option (concat helm-ag-command-option " " flag)))
@@ -56,8 +57,7 @@
    (("m" helm-ag-clear-stack "clear stack" :exit t)
     ("." helm-ag-pop-stack "back" :exit t)))
   :config
-  (setq helm-ag-fuzzy-match t)
-  )
+  (setq helm-ag-fuzzy-match t))
 
 (use-package helm-swoop
   :bind

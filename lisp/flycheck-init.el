@@ -12,6 +12,7 @@
   :hook (flycheck-rust-setup))
 
 (use-package flycheck
+  :after hydra
   :diminish
   :commands flycheck-redefine-standard-error-levels
   :hook (after-init . global-flycheck-mode)
