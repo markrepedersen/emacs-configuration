@@ -245,7 +245,6 @@
   (update-to-load-path my-load-file-dir))
 
 (init-settings)
-(load-hydras)
 (delete-intermediate-dired-buffers)
 (dump-custom)
 (match-parens)
@@ -253,3 +252,4 @@
 (change-scrolling-speed)
 (sync-buffer-external)
 (load-directory my-load-file-dir)
+(load-hydras)
