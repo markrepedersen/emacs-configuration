@@ -1,4 +1,5 @@
 (use-package emacs-lisp-mode
+  :after hydra
   :ensure nil
   :mode-hydra
   ("Eval"

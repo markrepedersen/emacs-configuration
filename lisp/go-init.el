@@ -1,4 +1,5 @@
 (use-package go-mode
+  :after hydra
   :functions (go-packages-gopkgs go-update-tools)
   :mode ("\\.go\\'" . go-mode)
   :mode-hydra

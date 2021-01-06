@@ -4,6 +4,7 @@
   :diminish)
 
 (use-package docker-compose-mode
+  :after hydra
   :defer t
   :mode "docker-compose[a-zA-Z.-]*\\'"
   :mode-hydra
@@ -16,6 +17,7 @@
   :defer t)
 
 (use-package dockerfile-mode
+  :after hydra
   :defer t
   :mode "Dockerfile[a-zA-Z.-]*\\'"
   :config
