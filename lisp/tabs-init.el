@@ -31,39 +31,35 @@
  All buffer name start with * will group to \"Emacs\".
  Other buffer group by `centaur-tabs-get-group-name' with project name."
     (list
-     (cond
-      ;; ((not (eq (file-remote-p (buffer-file-name)) nil))
-      ;; "Remote")
-      ((or (string-equal "*" (substring (buffer-name) 0 1))
-	   (memq major-mode '(magit-process-mode
-			      magit-status-mode
-			      magit-diff-mode
-			      magit-log-mode
-			      magit-file-mode
-			      magit-blob-mode
-			      magit-blame-mode
-			      )))
-       "Emacs")
-      ((derived-mode-p 'prog-mode)
-       "Editing")
-      ((derived-mode-p 'dired-mode)
-       "Dired")
-      ((memq major-mode '(helpful-mode
-			  help-mode))
-       "Help")
-      ((memq major-mode '(org-mode
-			  org-agenda-clockreport-mode
-			  org-src-mode
-			  org-agenda-mode
-			  org-beamer-mode
-			  org-indent-mode
-			  org-bullets-mode
-			  org-cdlatex-mode
-			  org-agenda-log-mode
-			  diary-mode))
-       "OrgMode")
-      (t
-       (centaur-tabs-get-group-name (current-buffer))))))
+     (cond ((or (string-equal "*" (substring (buffer-name) 0 1))
+		(memq major-mode '(magit-process-mode
+				   magit-status-mode
+				   magit-diff-mode
+				   magit-log-mode
+				   magit-file-mode
+				   magit-blob-mode
+				   magit-blame-mode)))
+	    "Emacs")
+	   ((derived-mode-p 'prog-mode)
+	    "Editing")
+	   ((derived-mode-p 'dired-mode)
+	    "Dired")
+	   ((memq major-mode '(helpful-mode
+			       help-mode))
+	    "Help")
+	   ((memq major-mode '(org-mode
+			       org-agenda-clockreport-mode
+			       org-src-mode
+			       org-agenda-mode
+			       org-beamer-mode
+			       org-indent-mode
+			       org-bullets-mode
+			       org-cdlatex-mode
+			       org-agenda-log-mode
+			       diary-mode))
+	    "OrgMode")
+	   (t
+	    (centaur-tabs-get-group-name (current-buffer))))))
 
   (setq vterm-toggle--vterm-buffer-p-function 'vmacs-term-mode-p)
   (defun vmacs-term-mode-p(&optional args)

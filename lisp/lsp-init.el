@@ -1,4 +1,5 @@
 (use-package ccls
+  :defer t
   :hook ((c-mode c++-mode objc-mode) .
          (lambda () (require 'ccls) (lsp)))
   :config
@@ -22,6 +23,7 @@
     :library-folders-fn nil)))
 
 (use-package lsp-mode
+  :defer t
   :after hydra
   :hook ((rustic-mode . lsp)
 	 (sh-mode . lsp)
@@ -81,6 +83,7 @@
 
 ;; Refer to https://code.visualstudio.com/docs/cpp/launch-json-reference for C++ dap-mode launch.json configuration arguments.
 (use-package dap-mode
+  :defer t
   :commands dap-mode
   :hook (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
   :config
@@ -95,13 +98,13 @@
   (require 'dap-gdb-lldb)
   (require 'dap-cpptools))
 
-(use-package company-lsp
-  :defer t
-  :config
-  (push 'company-lsp company-backends)
-  (setq company-transformers nil
-        company-lsp-async t
-        company-lsp-cache-candidates nil))
+;; (use-package company-lsp
+;;   :defer t
+;;   :config
+;;   (push 'company-lsp company-backends)
+;;   (setq company-transformers nil
+;;         company-lsp-async t
+;;         company-lsp-cache-candidates nil))
 
 (use-package helm-lsp
   :defer t
@@ -124,7 +127,7 @@
 	      lsp-ui-doc-use-webkit nil
 	      lsp-ui-doc-delay 0.1
 	      lsp-ui-doc-include-signature t
-	      lsp-ui-doc-position 'top
+	      lsp-ui-doc-position 'bottom
 	      lsp-ui-doc-border (face-foreground 'default)
 	      lsp-ui-doc-border "cyan"
 	      lsp-eldoc-enable-hover t

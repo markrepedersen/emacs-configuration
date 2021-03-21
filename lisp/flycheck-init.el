@@ -4,9 +4,10 @@
   (flycheck-posframe-face ((t (:foreground ,(face-foreground 'success)))))
   (flycheck-posframe-info-face ((t (:foreground ,(face-foreground 'success)))))
   :hook (flycheck-mode . flycheck-posframe-mode)
-  :init (setq flycheck-posframe-border-width 4
-              flycheck-posframe-inhibit-functions
-              '((lambda (&rest _) (bound-and-true-p company-backend)))))
+  :init
+  (setq flycheck-posframe-border-width 4
+	flycheck-posframe-position 'window-bottom-left-corner
+        flycheck-posframe-inhibit-functions '((lambda (&rest _) (bound-and-true-p company-backend)))))
 
 (use-package flycheck-rust
   :hook (flycheck-rust-setup))
