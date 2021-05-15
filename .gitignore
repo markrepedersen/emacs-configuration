@@ -42,3 +42,5 @@ network-security.data
 request
 to-be-dumped.el
 workspace
+/eln-cache/
+/session.*

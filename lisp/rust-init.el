@@ -1,5 +1,7 @@
 (use-package rustic
-  :hook (cargo-minor-mode)
+  :commands lsp
+  :hook ((cargo-minor-mode)
+	 (rustic-mode . lsp))
   :mode-hydra
   (rustic-mode
    (:title (with-mode-icon 'rust-mode "Rust"))

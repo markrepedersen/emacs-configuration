@@ -23,19 +23,9 @@
     :library-folders-fn nil)))
 
 (use-package lsp-mode
-  :defer t
+  :commands lsp
   :after hydra
-  :hook ((rustic-mode . lsp)
-	 (sh-mode . lsp)
-	 (html-mode . lsp)
-	 (c-mode . lsp)
-	 (c++-mode . lsp)
-	 (java-mode . lsp)
-	 (javascript-mode . lsp)
-	 (typescript-mode . lsp)
-	 (go-mode . lsp)
-	 (python-mode . lsp)
-	 (linum-mode))
+  :hook ((linum-mode))
   :pretty-hydra
   ((:color teal :quit-key "q" :title (with-mode-icon 'lsp-mode "LSP mode"))
    ("Find"
@@ -80,7 +70,6 @@
 	lsp-eldoc-hook nil
 	lsp-keep-workspace-alive nil))
 
-
 ;; Refer to https://code.visualstudio.com/docs/cpp/launch-json-reference for C++ dap-mode launch.json configuration arguments.
 (use-package dap-mode
   :defer t
@@ -98,48 +87,33 @@
   (require 'dap-gdb-lldb)
   (require 'dap-cpptools))
 
-;; (use-package company-lsp
-;;   :defer t
-;;   :config
-;;   (push 'company-lsp company-backends)
-;;   (setq company-transformers nil
-;;         company-lsp-async t
-;;         company-lsp-cache-candidates nil))
-
-(use-package helm-lsp
-  :defer t
-  :after lsp-mode
-  :config
-  (defun netrom/helm-lsp-workspace-symbol-at-point ()
-    (interactive)
-    (let ((current-prefix-arg t))
-      (call-interactively #'helm-lsp-workspace-symbol)))
-  (defun netrom/helm-lsp-global-workspace-symbol-at-point ()
-    (interactive)
-    (let ((current-prefix-arg t))
-      (call-interactively #'helm-lsp-global-workspace-symbol))))
-
 (use-package lsp-ui
-  :defer t
   :after lsp-mode
-  :hook (lsp-mode . lsp-ui-mode)
-  :init (setq lsp-ui-doc-enable t
-	      lsp-ui-doc-use-webkit nil
-	      lsp-ui-doc-delay 0.1
-	      lsp-ui-doc-include-signature t
-	      lsp-ui-doc-position 'bottom
-	      lsp-ui-doc-border (face-foreground 'default)
-	      lsp-ui-doc-border "cyan"
-	      lsp-eldoc-enable-hover t
-	      lsp-ui-sideline-enable nil
-	      lsp-ui-doc-use-childframe t
-	      lsp-ui-imenu-enable t
-	      lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
-                                    ,(face-foreground 'font-lock-string-face)
-                                    ,(face-foreground 'font-lock-constant-face)
-                                    ,(face-foreground 'font-lock-variable-name-face)))
+  :commands lsp-ui-mode
+  :custom-face
+  (lsp-ui-doc-background ((t (:background nil))))
+  (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
+  :bind
+  (:map lsp-ui-mode-map
+        ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+        ([remap xref-find-references] . lsp-ui-peek-find-references)
+        ("C-c u" . lsp-ui-imenu)
+        ("M-i" . lsp-ui-doc-focus-frame))
+  (:map lsp-mode-map
+        ("M-n" . forward-paragraph)
+        ("M-p" . backward-paragraph))
+  :custom
+  (lsp-ui-doc-header t)
+  (lsp-ui-doc-include-signature t)
+  (lsp-ui-doc-border (face-foreground 'default))
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-sideline-ignore-duplicate t)
+  (lsp-ui-sideline-show-code-actions nil)
   :config
-  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 20))
-  (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
-  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
+  ;; Use lsp-ui-doc-webkit only in GUI
+  (if (display-graphic-p)
+      (setq lsp-ui-doc-use-webkit t))
+  ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
+  ;; https://github.com/emacs-lsp/lsp-ui/issues/243
+  (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
+    (setq mode-line-format nil)))
