@@ -1,7 +1,4 @@
 (use-package rustic
-  :commands lsp
-  :hook ((cargo-minor-mode)
-	 (rustic-mode . lsp))
   :mode-hydra
   (rustic-mode
    (:title (with-mode-icon 'rust-mode "Rust"))
@@ -20,13 +17,4 @@
     (("n" next-error "Next" :exit nil)
      ("p" previous-error "Previous" :exit nil)
      ("f" first-error "First")
-     ("k" kill-compilation "Stop"))))
-  :init
-  (setq auto-mode-alist (delete '("\\.rs\\'" . rust-mode) auto-mode-alist))
-  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rustic-mode))
-  :config
-  (setq-default xref-prompt-for-identifier nil))
-
-(use-package cargo
-  :after rustic
-  :defer t)
+     ("k" kill-compilation "Stop")))))

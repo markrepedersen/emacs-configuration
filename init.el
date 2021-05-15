@@ -226,7 +226,7 @@
     :demand
     :bind
     ("M-SPC" . major-mode-hydra))
-  
+
   (require 'all-the-icons)
 
   (defun with-faicon (icon str &optional height v-adjust)
