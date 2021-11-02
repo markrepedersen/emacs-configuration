@@ -19,3 +19,6 @@
 			    company-dabbrev-code
 			    company-dabbrev))
 	))
+
+(use-package company-box
+  :hook (company-mode . company-box-mode))

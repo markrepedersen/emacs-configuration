@@ -54,6 +54,7 @@
 	lsp-rust-server 'rust-analyzer
 	lsp-disabled-clients '(rls))
   :config
+  (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)
   (unbind-key "M-n" lsp-signature-mode-map)
   (unbind-key "M-p" lsp-signature-mode-map)
   (push "[/\\\\][^/\\\\]*\\.\\(json\\|html\\|jade\\)$" lsp-file-watch-ignored)
@@ -68,7 +69,14 @@
 	lsp-enable-xref t
 	lsp-signature-auto-activate nil
 	lsp-eldoc-hook nil
-	lsp-keep-workspace-alive nil))
+	lsp-keep-workspace-alive nil)
+
+  ;; ------------ Tramp remote LSP config ------------
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-tramp-connection "clangd")
+                    :major-modes '(c-mode c++-mode)
+                    :remote? t
+                    :server-id 'clangd-remote)))
 
 ;; Refer to https://code.visualstudio.com/docs/cpp/launch-json-reference for C++ dap-mode launch.json configuration arguments.
 (use-package dap-mode

@@ -44,3 +44,5 @@ to-be-dumped.el
 workspace
 /eln-cache/
 /session.*
+/straight
+/tramp-connection-history

@@ -1,18 +1,36 @@
-(global-prettify-symbols-mode 1)
-
 (defun add-pretty-lambda ()
   "Make some word or string show as pretty Unicode symbols.  See https://unicodelookup.com for more."
-  (setq prettify-symbols-alist
-        '(
-          ("lambda" . 955)
-          ("delta" . 120517)
-          ("epsilon" . 120518)
-          ("->" . 8594)
-          ("<=" . 8804)
-          (">=" . 8805)
-          )))
-(add-hook 'prog-mode-hook 'add-pretty-lambda)
-(add-hook 'org-mode-hook 'add-pretty-lambda)
+  (setq prettify-symbols-alist '(
+				 ("lambda" . 955)
+				 ("delta" . 120517)
+				 ("epsilon" . 120518)
+				 ("->" . 8594)
+				 ("<=" . 8804)
+				 (">=" . 8805))))
+
+(pretty-hydra-define toggle-functions
+  (:title (with-faicon "toggle-on" "Toggles" 1 -0.05))
+  ("Basic"
+   (("n" linum-mode "line number" :toggle t)
+    ("w" whitespace-mode "whitespace" :toggle t)
+    ("W" whitespace-cleanup-mode "whitespace cleanup" :toggle t)
+    ("r" rainbow-mode "rainbow" :toggle t)
+    ("L" page-break-lines-mode "page break lines" :toggle t))
+   "Highlight"
+   (("s" symbol-overlay-mode "symbol" :toggle t)
+    ("t" fic-mode "todos" :toggle t)
+    ("h" highlight-indent-guides-mode "indentation" :toggle t)
+    ("l" hl-line-mode "line" :toggle t)
+    ("x" highlight-sexp-mode "sexp" :toggle t)
+    ("t" hl-todo-mode "todo" :toggle t))
+   "Coding"
+   (("p" smartparens-mode "smartparens" :toggle t)
+    ("P" smartparens-strict-mode "smartparens strict" :toggle t)
+    ("S" show-smartparens-mode "show smartparens" :toggle t)
+    ("f" flycheck-mode "flycheck" :toggle t))
+   "Emacs"
+   (("D" toggle-debug-on-error "debug on error" :toggle (default-value 'debug-on-error))
+    ("X" toggle-debug-on-quit "debug on quit" :toggle (default-value 'debug-on-quit)))))
 
 (use-package page-break-lines
   :diminish
@@ -47,17 +65,28 @@
   (when (not (member "all-the-icons" (font-family-list)))
     (all-the-icons-install-fonts t)))
 
-(use-package doom-themes
+;; (use-package doom-themes
+;;   :config
+;;   (load-theme 'doom-one t)
+;;   (doom-themes-visual-bell-config)
+;;   (doom-themes-org-config)
+;;   (setq doom-themes-enable-bold t     ; if nil, bold is universally disabled
+;;         doom-themes-enable-italic t)) ; if nil, italics is universally disabled
+
+(use-package gruvbox-theme
   :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
-
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+  (load-theme 'gruvbox-dark-hard t))
 
 (use-package doom-modeline :init (doom-modeline-mode 1))
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package aggressive-indent
+  :config
+  (global-aggressive-indent-mode 1))
+
+(global-prettify-symbols-mode 1)
+(add-hook 'prog-mode-hook 'add-pretty-lambda)
+(add-hook 'org-mode-hook 'add-pretty-lambda)
+(global-set-key (kbd "C-c t") 'toggle-functions/body)
